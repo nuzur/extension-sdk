@@ -3,6 +3,7 @@ module github.com/nuzur/extension-sdk
 go 1.22.3
 
 require (
+	github.com/gofrs/uuid v4.4.0+incompatible
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
 )
