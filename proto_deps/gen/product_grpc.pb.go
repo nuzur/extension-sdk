@@ -52,6 +52,7 @@ const (
 	NuzurProduct_GetExtensionVersion_FullMethodName                         = "/NuzurProduct/GetExtensionVersion"
 	NuzurProduct_CreateExtensionVersion_FullMethodName                      = "/NuzurProduct/CreateExtensionVersion"
 	NuzurProduct_UpdateExtensionVersion_FullMethodName                      = "/NuzurProduct/UpdateExtensionVersion"
+	NuzurProduct_ListExtensionExecutions_FullMethodName                     = "/NuzurProduct/ListExtensionExecutions"
 	NuzurProduct_GetExtensionExecution_FullMethodName                       = "/NuzurProduct/GetExtensionExecution"
 	NuzurProduct_CreateExtensionExecution_FullMethodName                    = "/NuzurProduct/CreateExtensionExecution"
 	NuzurProduct_UpdateExtensionExecution_FullMethodName                    = "/NuzurProduct/UpdateExtensionExecution"
@@ -102,6 +103,7 @@ type NuzurProductClient interface {
 	CreateExtensionVersion(ctx context.Context, in *CreateExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
 	UpdateExtensionVersion(ctx context.Context, in *UpdateExtensioVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
 	// extension exec
+	ListExtensionExecutions(ctx context.Context, in *ListExtensionExecutionsRequest, opts ...grpc.CallOption) (*ListExtensionExecutionsResponse, error)
 	GetExtensionExecution(ctx context.Context, in *GetExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
 	CreateExtensionExecution(ctx context.Context, in *CreateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
 	UpdateExtensionExecution(ctx context.Context, in *UpdateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
@@ -435,6 +437,16 @@ func (c *nuzurProductClient) UpdateExtensionVersion(ctx context.Context, in *Upd
 	return out, nil
 }
 
+func (c *nuzurProductClient) ListExtensionExecutions(ctx context.Context, in *ListExtensionExecutionsRequest, opts ...grpc.CallOption) (*ListExtensionExecutionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListExtensionExecutionsResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_ListExtensionExecutions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nuzurProductClient) GetExtensionExecution(ctx context.Context, in *GetExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(gen.ExtensionExecution)
@@ -510,6 +522,7 @@ type NuzurProductServer interface {
 	CreateExtensionVersion(context.Context, *CreateExtensionVersionRequest) (*gen.ExtensionVersion, error)
 	UpdateExtensionVersion(context.Context, *UpdateExtensioVersionRequest) (*gen.ExtensionVersion, error)
 	// extension exec
+	ListExtensionExecutions(context.Context, *ListExtensionExecutionsRequest) (*ListExtensionExecutionsResponse, error)
 	GetExtensionExecution(context.Context, *GetExtensionExecutionRequest) (*gen.ExtensionExecution, error)
 	CreateExtensionExecution(context.Context, *CreateExtensionExecutionRequest) (*gen.ExtensionExecution, error)
 	UpdateExtensionExecution(context.Context, *UpdateExtensionExecutionRequest) (*gen.ExtensionExecution, error)
@@ -618,6 +631,9 @@ func (UnimplementedNuzurProductServer) CreateExtensionVersion(context.Context, *
 }
 func (UnimplementedNuzurProductServer) UpdateExtensionVersion(context.Context, *UpdateExtensioVersionRequest) (*gen.ExtensionVersion, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateExtensionVersion not implemented")
+}
+func (UnimplementedNuzurProductServer) ListExtensionExecutions(context.Context, *ListExtensionExecutionsRequest) (*ListExtensionExecutionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListExtensionExecutions not implemented")
 }
 func (UnimplementedNuzurProductServer) GetExtensionExecution(context.Context, *GetExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetExtensionExecution not implemented")
@@ -1225,6 +1241,24 @@ func _NuzurProduct_UpdateExtensionVersion_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_ListExtensionExecutions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListExtensionExecutionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).ListExtensionExecutions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_ListExtensionExecutions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).ListExtensionExecutions(ctx, req.(*ListExtensionExecutionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NuzurProduct_GetExtensionExecution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetExtensionExecutionRequest)
 	if err := dec(in); err != nil {
@@ -1413,6 +1447,10 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateExtensionVersion",
 			Handler:    _NuzurProduct_UpdateExtensionVersion_Handler,
+		},
+		{
+			MethodName: "ListExtensionExecutions",
+			Handler:    _NuzurProduct_ListExtensionExecutions_Handler,
 		},
 		{
 			MethodName: "GetExtensionExecution",
