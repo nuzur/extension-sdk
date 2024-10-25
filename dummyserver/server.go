@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net"
 
-	pb "github.com/nuzur/extension-sdk/proto/gen"
+	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"

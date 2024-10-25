@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gofrs/uuid"
-	pb "github.com/nuzur/extension-sdk/proto/gen"
-	"github.com/nuzur/extension-sdk/proto/nem/idl/gen"
+	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
+	"github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
 )
 
 // ActivateUserTeamInvite implements gen.NuzurProductServer.
@@ -75,7 +75,9 @@ func (s *Server) GetProjectVersionForUser(context.Context, *pb.GetProjectVersion
 
 // GetTeamForUser implements gen.NuzurProductServer.
 func (s *Server) GetTeamForUser(context.Context, *pb.GetTeamForUserRequest) (*gen.Team, error) {
-	panic("unimplemented")
+	return &gen.Team{
+		Uuid: uuid.Must(uuid.NewV4()).String(),
+	}, nil
 }
 
 // GetUser implements gen.NuzurProductServer.
