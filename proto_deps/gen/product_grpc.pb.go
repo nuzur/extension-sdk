@@ -44,6 +44,17 @@ const (
 	NuzurProduct_UpdateProjectVersion_FullMethodName                        = "/NuzurProduct/UpdateProjectVersion"
 	NuzurProduct_DiscardDraftProjectVersion_FullMethodName                  = "/NuzurProduct/DiscardDraftProjectVersion"
 	NuzurProduct_UploadProjectSnapshot_FullMethodName                       = "/NuzurProduct/UploadProjectSnapshot"
+	NuzurProduct_ListExtensions_FullMethodName                              = "/NuzurProduct/ListExtensions"
+	NuzurProduct_GetExtension_FullMethodName                                = "/NuzurProduct/GetExtension"
+	NuzurProduct_CreateExtension_FullMethodName                             = "/NuzurProduct/CreateExtension"
+	NuzurProduct_UpdateExtension_FullMethodName                             = "/NuzurProduct/UpdateExtension"
+	NuzurProduct_ListExtensionVersions_FullMethodName                       = "/NuzurProduct/ListExtensionVersions"
+	NuzurProduct_GetExtensionVersion_FullMethodName                         = "/NuzurProduct/GetExtensionVersion"
+	NuzurProduct_CreateExtensionVersion_FullMethodName                      = "/NuzurProduct/CreateExtensionVersion"
+	NuzurProduct_UpdateExtensionVersion_FullMethodName                      = "/NuzurProduct/UpdateExtensionVersion"
+	NuzurProduct_GetExtensionExecution_FullMethodName                       = "/NuzurProduct/GetExtensionExecution"
+	NuzurProduct_CreateExtensionExecution_FullMethodName                    = "/NuzurProduct/CreateExtensionExecution"
+	NuzurProduct_UpdateExtensionExecution_FullMethodName                    = "/NuzurProduct/UpdateExtensionExecution"
 )
 
 // NuzurProductClient is the client API for NuzurProduct service.
@@ -80,6 +91,20 @@ type NuzurProductClient interface {
 	DiscardDraftProjectVersion(ctx context.Context, in *DiscardDraftProjectVersionRequest, opts ...grpc.CallOption) (*gen.ProjectVersion, error)
 	// upload files
 	UploadProjectSnapshot(ctx context.Context, in *UploadProjectSnapshotRequest, opts ...grpc.CallOption) (*UploadProjectSnapshotResponse, error)
+	// extensions
+	ListExtensions(ctx context.Context, in *ListExtensionsRequest, opts ...grpc.CallOption) (*ListExtensionsResponse, error)
+	GetExtension(ctx context.Context, in *GetExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error)
+	CreateExtension(ctx context.Context, in *CreateExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error)
+	UpdateExtension(ctx context.Context, in *UpdateExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error)
+	// extension version
+	ListExtensionVersions(ctx context.Context, in *ListExtensionVersionsRequest, opts ...grpc.CallOption) (*ListExtensionVersionsResponse, error)
+	GetExtensionVersion(ctx context.Context, in *GetExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
+	CreateExtensionVersion(ctx context.Context, in *CreateExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
+	UpdateExtensionVersion(ctx context.Context, in *UpdateExtensioVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
+	// extension exec
+	GetExtensionExecution(ctx context.Context, in *GetExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
+	CreateExtensionExecution(ctx context.Context, in *CreateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
+	UpdateExtensionExecution(ctx context.Context, in *UpdateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
 }
 
 type nuzurProductClient struct {
@@ -330,6 +355,116 @@ func (c *nuzurProductClient) UploadProjectSnapshot(ctx context.Context, in *Uplo
 	return out, nil
 }
 
+func (c *nuzurProductClient) ListExtensions(ctx context.Context, in *ListExtensionsRequest, opts ...grpc.CallOption) (*ListExtensionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListExtensionsResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_ListExtensions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) GetExtension(ctx context.Context, in *GetExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Extension)
+	err := c.cc.Invoke(ctx, NuzurProduct_GetExtension_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) CreateExtension(ctx context.Context, in *CreateExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Extension)
+	err := c.cc.Invoke(ctx, NuzurProduct_CreateExtension_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) UpdateExtension(ctx context.Context, in *UpdateExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Extension)
+	err := c.cc.Invoke(ctx, NuzurProduct_UpdateExtension_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) ListExtensionVersions(ctx context.Context, in *ListExtensionVersionsRequest, opts ...grpc.CallOption) (*ListExtensionVersionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListExtensionVersionsResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_ListExtensionVersions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) GetExtensionVersion(ctx context.Context, in *GetExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.ExtensionVersion)
+	err := c.cc.Invoke(ctx, NuzurProduct_GetExtensionVersion_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) CreateExtensionVersion(ctx context.Context, in *CreateExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.ExtensionVersion)
+	err := c.cc.Invoke(ctx, NuzurProduct_CreateExtensionVersion_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) UpdateExtensionVersion(ctx context.Context, in *UpdateExtensioVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.ExtensionVersion)
+	err := c.cc.Invoke(ctx, NuzurProduct_UpdateExtensionVersion_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) GetExtensionExecution(ctx context.Context, in *GetExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.ExtensionExecution)
+	err := c.cc.Invoke(ctx, NuzurProduct_GetExtensionExecution_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) CreateExtensionExecution(ctx context.Context, in *CreateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.ExtensionExecution)
+	err := c.cc.Invoke(ctx, NuzurProduct_CreateExtensionExecution_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) UpdateExtensionExecution(ctx context.Context, in *UpdateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.ExtensionExecution)
+	err := c.cc.Invoke(ctx, NuzurProduct_UpdateExtensionExecution_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NuzurProductServer is the server API for NuzurProduct service.
 // All implementations must embed UnimplementedNuzurProductServer
 // for forward compatibility.
@@ -364,6 +499,20 @@ type NuzurProductServer interface {
 	DiscardDraftProjectVersion(context.Context, *DiscardDraftProjectVersionRequest) (*gen.ProjectVersion, error)
 	// upload files
 	UploadProjectSnapshot(context.Context, *UploadProjectSnapshotRequest) (*UploadProjectSnapshotResponse, error)
+	// extensions
+	ListExtensions(context.Context, *ListExtensionsRequest) (*ListExtensionsResponse, error)
+	GetExtension(context.Context, *GetExtensionRequest) (*gen.Extension, error)
+	CreateExtension(context.Context, *CreateExtensionRequest) (*gen.Extension, error)
+	UpdateExtension(context.Context, *UpdateExtensionRequest) (*gen.Extension, error)
+	// extension version
+	ListExtensionVersions(context.Context, *ListExtensionVersionsRequest) (*ListExtensionVersionsResponse, error)
+	GetExtensionVersion(context.Context, *GetExtensionVersionRequest) (*gen.ExtensionVersion, error)
+	CreateExtensionVersion(context.Context, *CreateExtensionVersionRequest) (*gen.ExtensionVersion, error)
+	UpdateExtensionVersion(context.Context, *UpdateExtensioVersionRequest) (*gen.ExtensionVersion, error)
+	// extension exec
+	GetExtensionExecution(context.Context, *GetExtensionExecutionRequest) (*gen.ExtensionExecution, error)
+	CreateExtensionExecution(context.Context, *CreateExtensionExecutionRequest) (*gen.ExtensionExecution, error)
+	UpdateExtensionExecution(context.Context, *UpdateExtensionExecutionRequest) (*gen.ExtensionExecution, error)
 	mustEmbedUnimplementedNuzurProductServer()
 }
 
@@ -445,6 +594,39 @@ func (UnimplementedNuzurProductServer) DiscardDraftProjectVersion(context.Contex
 }
 func (UnimplementedNuzurProductServer) UploadProjectSnapshot(context.Context, *UploadProjectSnapshotRequest) (*UploadProjectSnapshotResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadProjectSnapshot not implemented")
+}
+func (UnimplementedNuzurProductServer) ListExtensions(context.Context, *ListExtensionsRequest) (*ListExtensionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListExtensions not implemented")
+}
+func (UnimplementedNuzurProductServer) GetExtension(context.Context, *GetExtensionRequest) (*gen.Extension, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetExtension not implemented")
+}
+func (UnimplementedNuzurProductServer) CreateExtension(context.Context, *CreateExtensionRequest) (*gen.Extension, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateExtension not implemented")
+}
+func (UnimplementedNuzurProductServer) UpdateExtension(context.Context, *UpdateExtensionRequest) (*gen.Extension, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateExtension not implemented")
+}
+func (UnimplementedNuzurProductServer) ListExtensionVersions(context.Context, *ListExtensionVersionsRequest) (*ListExtensionVersionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListExtensionVersions not implemented")
+}
+func (UnimplementedNuzurProductServer) GetExtensionVersion(context.Context, *GetExtensionVersionRequest) (*gen.ExtensionVersion, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetExtensionVersion not implemented")
+}
+func (UnimplementedNuzurProductServer) CreateExtensionVersion(context.Context, *CreateExtensionVersionRequest) (*gen.ExtensionVersion, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateExtensionVersion not implemented")
+}
+func (UnimplementedNuzurProductServer) UpdateExtensionVersion(context.Context, *UpdateExtensioVersionRequest) (*gen.ExtensionVersion, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateExtensionVersion not implemented")
+}
+func (UnimplementedNuzurProductServer) GetExtensionExecution(context.Context, *GetExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetExtensionExecution not implemented")
+}
+func (UnimplementedNuzurProductServer) CreateExtensionExecution(context.Context, *CreateExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateExtensionExecution not implemented")
+}
+func (UnimplementedNuzurProductServer) UpdateExtensionExecution(context.Context, *UpdateExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateExtensionExecution not implemented")
 }
 func (UnimplementedNuzurProductServer) mustEmbedUnimplementedNuzurProductServer() {}
 func (UnimplementedNuzurProductServer) testEmbeddedByValue()                      {}
@@ -899,6 +1081,204 @@ func _NuzurProduct_UploadProjectSnapshot_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_ListExtensions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListExtensionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).ListExtensions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_ListExtensions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).ListExtensions(ctx, req.(*ListExtensionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_GetExtension_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetExtensionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).GetExtension(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_GetExtension_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).GetExtension(ctx, req.(*GetExtensionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_CreateExtension_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateExtensionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).CreateExtension(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_CreateExtension_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).CreateExtension(ctx, req.(*CreateExtensionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_UpdateExtension_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateExtensionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UpdateExtension(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UpdateExtension_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UpdateExtension(ctx, req.(*UpdateExtensionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_ListExtensionVersions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListExtensionVersionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).ListExtensionVersions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_ListExtensionVersions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).ListExtensionVersions(ctx, req.(*ListExtensionVersionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_GetExtensionVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetExtensionVersionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).GetExtensionVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_GetExtensionVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).GetExtensionVersion(ctx, req.(*GetExtensionVersionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_CreateExtensionVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateExtensionVersionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).CreateExtensionVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_CreateExtensionVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).CreateExtensionVersion(ctx, req.(*CreateExtensionVersionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_UpdateExtensionVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateExtensioVersionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UpdateExtensionVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UpdateExtensionVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UpdateExtensionVersion(ctx, req.(*UpdateExtensioVersionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_GetExtensionExecution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetExtensionExecutionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).GetExtensionExecution(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_GetExtensionExecution_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).GetExtensionExecution(ctx, req.(*GetExtensionExecutionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_CreateExtensionExecution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateExtensionExecutionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).CreateExtensionExecution(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_CreateExtensionExecution_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).CreateExtensionExecution(ctx, req.(*CreateExtensionExecutionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_UpdateExtensionExecution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateExtensionExecutionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UpdateExtensionExecution(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UpdateExtensionExecution_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UpdateExtensionExecution(ctx, req.(*UpdateExtensionExecutionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NuzurProduct_ServiceDesc is the grpc.ServiceDesc for NuzurProduct service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1001,6 +1381,50 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadProjectSnapshot",
 			Handler:    _NuzurProduct_UploadProjectSnapshot_Handler,
+		},
+		{
+			MethodName: "ListExtensions",
+			Handler:    _NuzurProduct_ListExtensions_Handler,
+		},
+		{
+			MethodName: "GetExtension",
+			Handler:    _NuzurProduct_GetExtension_Handler,
+		},
+		{
+			MethodName: "CreateExtension",
+			Handler:    _NuzurProduct_CreateExtension_Handler,
+		},
+		{
+			MethodName: "UpdateExtension",
+			Handler:    _NuzurProduct_UpdateExtension_Handler,
+		},
+		{
+			MethodName: "ListExtensionVersions",
+			Handler:    _NuzurProduct_ListExtensionVersions_Handler,
+		},
+		{
+			MethodName: "GetExtensionVersion",
+			Handler:    _NuzurProduct_GetExtensionVersion_Handler,
+		},
+		{
+			MethodName: "CreateExtensionVersion",
+			Handler:    _NuzurProduct_CreateExtensionVersion_Handler,
+		},
+		{
+			MethodName: "UpdateExtensionVersion",
+			Handler:    _NuzurProduct_UpdateExtensionVersion_Handler,
+		},
+		{
+			MethodName: "GetExtensionExecution",
+			Handler:    _NuzurProduct_GetExtensionExecution_Handler,
+		},
+		{
+			MethodName: "CreateExtensionExecution",
+			Handler:    _NuzurProduct_CreateExtensionExecution_Handler,
+		},
+		{
+			MethodName: "UpdateExtensionExecution",
+			Handler:    _NuzurProduct_UpdateExtensionExecution_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
