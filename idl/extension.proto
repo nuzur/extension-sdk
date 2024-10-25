@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "extension/";
+option go_package = "gen/";
 option java_multiple_files = true;
 option java_package = "nuzurextension";
 option java_outer_classname = "NuzurExtension";
@@ -31,7 +31,7 @@ message StartExecutionRequest {
 enum ExecutionResponseType {
     EXECUTION_RESPONSE_TYPE_INVALID = 0;
     EXECUTION_RESPONSE_TYPE_FINAL = 1;
-    EXECUTION_RESPONSE_TYPE_STEP = 1;
+    EXECUTION_RESPONSE_TYPE_STEP = 2;
 }
 
 message StartExecutionResponse {
@@ -95,8 +95,8 @@ message ExecutionStepDataInput {
     string identifier = 1;
     string display_name = 2;
     string description = 3;
-    ExecutionStepDataInputType type = 2;  
-    bool required = 3;    
+    ExecutionStepDataInputType type = 4;  
+    bool required = 5;    
 }
 
 message SubmitExectuionStepRequest {
