@@ -2,7 +2,9 @@ package client
 
 import (
 	"crypto/x509"
+	"errors"
 
+	"github.com/gofrs/uuid"
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -10,20 +12,37 @@ import (
 )
 
 type Client struct {
-	token         string
 	conn          *grpc.ClientConn
 	productClient pb.NuzurProductClient
+
+	ExtensionUUID        string // this needs to be created before hand
+	ExtensionVersionUUID string // this needs to be created before hand
+	ExtensionName        string // returned by the metadata endpoint to identify the extension
+	ExtensionAuthor      string // returned by the metadata endpoint to identify the extension
+	NumberOfSteps        int32  // returned by the metadata endpoint
 }
 
 type Params struct {
-	Token       string
-	API_ADDRESS *string
-	DisableTLS  bool
+	ExtensionUUID        string // this needs to be created before hand
+	ExtensionVersionUUID string // this needs to be created before hand
+	ExtensionName        string // returned by the metadata endpoint to identify the extension
+	ExtensionAuthor      string // returned by the metadata endpoint to identify the extension
+	NumberOfSteps        int32  // returned by the metadata endpoint
+
+	API_ADDRESS *string // to enable testing
+	DisableTLS  bool    // to enable testing
 }
 
 func New(params Params) (*Client, error) {
-	var opts []grpc.DialOption
 
+	if uuid.FromStringOrNil(params.ExtensionUUID) == uuid.Nil {
+		return nil, errors.New("please provide a valid extension uuid")
+	}
+	if uuid.FromStringOrNil(params.ExtensionVersionUUID) == uuid.Nil {
+		return nil, errors.New("please provide a valid extension version uuid")
+	}
+
+	var opts []grpc.DialOption
 	if params.DisableTLS {
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	} else {
@@ -46,9 +65,16 @@ func New(params Params) (*Client, error) {
 
 	productClient := pb.NewNuzurProductClient(conn)
 
+	// TODO possibly call api to get the extension details to validate
+
 	return &Client{
-		token:         params.Token,
 		conn:          conn,
 		productClient: productClient,
+
+		ExtensionUUID:        params.ExtensionUUID,
+		ExtensionVersionUUID: params.ExtensionVersionUUID,
+		ExtensionName:        params.ExtensionName,
+		ExtensionAuthor:      params.ExtensionAuthor,
+		NumberOfSteps:        params.NumberOfSteps,
 	}, nil
 }

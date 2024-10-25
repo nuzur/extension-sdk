@@ -9,7 +9,6 @@ func BuildDummyClientServer() (*Client, *dummyserver.Server, error) {
 	}
 
 	client, err := New(Params{
-		Token:       "some-token",
 		API_ADDRESS: server.Address(),
 		DisableTLS:  true,
 	})
