@@ -101,7 +101,7 @@ type NuzurProductClient interface {
 	ListExtensionVersions(ctx context.Context, in *ListExtensionVersionsRequest, opts ...grpc.CallOption) (*ListExtensionVersionsResponse, error)
 	GetExtensionVersion(ctx context.Context, in *GetExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
 	CreateExtensionVersion(ctx context.Context, in *CreateExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
-	UpdateExtensionVersion(ctx context.Context, in *UpdateExtensioVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
+	UpdateExtensionVersion(ctx context.Context, in *UpdateExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error)
 	// extension exec
 	ListExtensionExecutions(ctx context.Context, in *ListExtensionExecutionsRequest, opts ...grpc.CallOption) (*ListExtensionExecutionsResponse, error)
 	GetExtensionExecution(ctx context.Context, in *GetExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
@@ -427,7 +427,7 @@ func (c *nuzurProductClient) CreateExtensionVersion(ctx context.Context, in *Cre
 	return out, nil
 }
 
-func (c *nuzurProductClient) UpdateExtensionVersion(ctx context.Context, in *UpdateExtensioVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error) {
+func (c *nuzurProductClient) UpdateExtensionVersion(ctx context.Context, in *UpdateExtensionVersionRequest, opts ...grpc.CallOption) (*gen.ExtensionVersion, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(gen.ExtensionVersion)
 	err := c.cc.Invoke(ctx, NuzurProduct_UpdateExtensionVersion_FullMethodName, in, out, cOpts...)
@@ -520,7 +520,7 @@ type NuzurProductServer interface {
 	ListExtensionVersions(context.Context, *ListExtensionVersionsRequest) (*ListExtensionVersionsResponse, error)
 	GetExtensionVersion(context.Context, *GetExtensionVersionRequest) (*gen.ExtensionVersion, error)
 	CreateExtensionVersion(context.Context, *CreateExtensionVersionRequest) (*gen.ExtensionVersion, error)
-	UpdateExtensionVersion(context.Context, *UpdateExtensioVersionRequest) (*gen.ExtensionVersion, error)
+	UpdateExtensionVersion(context.Context, *UpdateExtensionVersionRequest) (*gen.ExtensionVersion, error)
 	// extension exec
 	ListExtensionExecutions(context.Context, *ListExtensionExecutionsRequest) (*ListExtensionExecutionsResponse, error)
 	GetExtensionExecution(context.Context, *GetExtensionExecutionRequest) (*gen.ExtensionExecution, error)
@@ -629,7 +629,7 @@ func (UnimplementedNuzurProductServer) GetExtensionVersion(context.Context, *Get
 func (UnimplementedNuzurProductServer) CreateExtensionVersion(context.Context, *CreateExtensionVersionRequest) (*gen.ExtensionVersion, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateExtensionVersion not implemented")
 }
-func (UnimplementedNuzurProductServer) UpdateExtensionVersion(context.Context, *UpdateExtensioVersionRequest) (*gen.ExtensionVersion, error) {
+func (UnimplementedNuzurProductServer) UpdateExtensionVersion(context.Context, *UpdateExtensionVersionRequest) (*gen.ExtensionVersion, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateExtensionVersion not implemented")
 }
 func (UnimplementedNuzurProductServer) ListExtensionExecutions(context.Context, *ListExtensionExecutionsRequest) (*ListExtensionExecutionsResponse, error) {
@@ -1224,7 +1224,7 @@ func _NuzurProduct_CreateExtensionVersion_Handler(srv interface{}, ctx context.C
 }
 
 func _NuzurProduct_UpdateExtensionVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateExtensioVersionRequest)
+	in := new(UpdateExtensionVersionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1236,7 +1236,7 @@ func _NuzurProduct_UpdateExtensionVersion_Handler(srv interface{}, ctx context.C
 		FullMethod: NuzurProduct_UpdateExtensionVersion_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NuzurProductServer).UpdateExtensionVersion(ctx, req.(*UpdateExtensioVersionRequest))
+		return srv.(NuzurProductServer).UpdateExtensionVersion(ctx, req.(*UpdateExtensionVersionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
