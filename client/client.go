@@ -6,6 +6,7 @@ import (
 	pb "github.com/nuzur/extension-sdk/proto/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type Client struct {
@@ -15,21 +16,30 @@ type Client struct {
 }
 
 type Params struct {
-	Token string
+	Token       string
+	API_ADDRESS *string
+	DisableTLS  bool
 }
 
 func New(params Params) (*Client, error) {
 	var opts []grpc.DialOption
 
-	pool, err := x509.SystemCertPool()
-	if err != nil {
-		return nil, err
+	if params.DisableTLS {
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	} else {
+		pool, err := x509.SystemCertPool()
+		if err != nil {
+			return nil, err
+		}
+		creds := credentials.NewClientTLSFromCert(pool, "")
+		opts = append(opts, grpc.WithTransportCredentials(creds))
 	}
-	creds := credentials.NewClientTLSFromCert(pool, "")
-	opts = append(opts, grpc.WithTransportCredentials(creds))
 
-	// TODO move address to config
-	conn, err := grpc.NewClient("api.nuzur.com:443", opts...)
+	api_address := API_PROD_ADDRESS
+	if params.API_ADDRESS != nil {
+		api_address = *params.API_ADDRESS
+	}
+	conn, err := grpc.NewClient(api_address, opts...)
 	if err != nil {
 		return nil, err
 	}
