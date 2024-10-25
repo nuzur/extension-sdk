@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+option go_package = "extension/";
+option java_multiple_files = true;
+option java_package = "nuzurextension";
+option java_outer_classname = "NuzurExtension";
+
+service NuzurExtension {
+    rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
+    rpc StartExecution(StartExecutionRequest) returns (StartExecutionResponse) {}
+    rpc SubmitExectuionStep(SubmitExectuionStepRequest) returns (SubmitExectuionStepResponse) {}
+    rpc GetExecutionStatus(GetExecutionStatusRequest) returns (GetExecutionStatusResponse) {}
+}
+
+message GetMetadataRequest {}
+
+message GetMetadataResponse {
+    string uuid = 1;
+    string version_uuid = 2;
+    string name = 3;
+    string author = 4;
+    int32 numberOfSteps = 5;
+}
+
+message StartExecutionRequest {
+    string project_uuid = 1;
+    string project_version_uuid = 2;
+    string project_extension_uuid = 3; // for automatic extension execution     
+}
+
+enum ExecutionResponseType {
+    EXECUTION_RESPONSE_TYPE_INVALID = 0;
+    EXECUTION_RESPONSE_TYPE_FINAL = 1;
+    EXECUTION_RESPONSE_TYPE_STEP = 1;
+}
+
+message StartExecutionResponse {
+    string execution_uuid = 1;
+    ExecutionResponseType type = 2;
+    ExecutionResponseTypeData data = 3;
+}
+
+message ExecutionResponseTypeData {
+    ExecutionResponseTypeFinalData final = 1;
+    ExecutionResponseTypeStepData step = 2;
+}
+
+enum ExecutionStatus {
+    EXECUTION_STATUS_INVALID = 0;
+    EXECUTION_STATUS_INPROGRESS = 1;
+    EXECUTION_STATUS_SUCCEEDED = 2;
+    EXECUTION_STATUS_FAILED = 3;
+    EXECUTION_STATUS_CANCELLED = 4;
+}
+
+message ExecutionResponseTypeFinalData {
+    ExecutionStatus status = 1;
+    string status_message = 2;
+    string file_download_url = 3;
+    repeated ExecutionResponseDisplayBlock display_blocks = 4;
+}
+
+message ExecutionResponseDisplayBlock {
+    string title = 1;
+    string description = 2;
+    string content = 3;
+}
+
+enum ExecutionStepType {
+    EXECUTION_STEP_TYPE_INVALID = 0;
+    EXECUTION_STEP_TYPE_CONFIRMATION = 1;
+    EXECUTION_STEP_TYPE_DATAREQUEST = 2;
+    EXECUTION_STEP_TYPE_DATAREQUEST_AND_CONFIRMATION = 3;
+}
+
+message ExecutionResponseTypeStepData {
+    string step_identifier = 1;
+    ExecutionStepType type = 2;
+    ExecutionResponseDisplayBlock display_block = 3;
+    repeated ExecutionStepDataInput data_inputs = 4;
+}
+
+enum ExecutionStepDataInputType {
+    EXECUTION_STEP_DATA_INPUT_TYPE_INVALID = 0;
+    EXECUTION_STEP_DATA_INPUT_TYPE_UUID = 1;
+    EXECUTION_STEP_DATA_INPUT_TYPE_INTEGER = 2;
+    EXECUTION_STEP_DATA_INPUT_TYPE_FLOAT = 3;    
+    EXECUTION_STEP_DATA_INPUT_TYPE_BOOLEAN = 4;
+    EXECUTION_STEP_DATA_INPUT_TYPE_STRING = 5;
+    EXECUTION_STEP_DATA_INPUT_TYPE_DATE = 6;
+    EXECUTION_STEP_DATA_INPUT_TYPE_DATETIME = 7;
+}
+
+message ExecutionStepDataInput {
+    string identifier = 1;
+    string display_name = 2;
+    string description = 3;
+    ExecutionStepDataInputType type = 2;  
+    bool required = 3;    
+}
+
+message SubmitExectuionStepRequest {
+    string step_identifier = 1;
+    bool confrimed = 2;
+    repeated ExecutionStepDataInputValue input_values = 3;
+}
+
+message ExecutionStepDataInputValue {
+    string identifier = 1;
+    string value = 2;
+}
+
+message SubmitExectuionStepResponse {
+    string execution_uuid = 1;
+    ExecutionResponseType type = 2;
+    ExecutionResponseTypeData data = 3;
+}
+
+message GetExecutionStatusRequest {
+    string execution_uuid = 1;
+}
+
+message GetExecutionStatusResponse {
+    ExecutionStatus status = 1;
+    string status_msg = 2;
+    string time_elapsed = 3;
+    string estimated_time_remaining = 4;
+    string current_step = 5; 
+}
+
+
+
+
+
