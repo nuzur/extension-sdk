@@ -2,8 +2,9 @@ package client
 
 import (
 	"crypto/x509"
+	"log"
+	"os"
 	"path/filepath"
-	"runtime"
 
 	"github.com/nuzur/extension-sdk/config"
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
@@ -76,11 +77,9 @@ func New(params Params) (*Client, error) {
 }
 
 func RootPath() string {
-	_, callerFile, _, _ := runtime.Caller(1)
-	generatorDir := filepath.Dir(callerFile)
-	absoluteGeneratorDir, err := filepath.Abs(generatorDir)
+	dir, err := os.Getwd()
 	if err != nil {
-		panic("could not resolve path")
+		log.Fatal(err)
 	}
-	return filepath.Dir(absoluteGeneratorDir)
+	return dir
 }
