@@ -8,129 +8,54 @@ import (
 	"github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
 )
 
-// ActivateUserTeamInvite implements gen.NuzurProductServer.
-func (s *Server) ActivateUserTeamInvite(context.Context, *pb.ActivateUserTeamInviteRequest) (*gen.UserTeam, error) {
-	panic("unimplemented")
-}
-
-// CreateConnectionSecret implements gen.NuzurProductServer.
-func (s *Server) CreateConnectionSecret(context.Context, *pb.CreateConnectionSecretRequest) (*gen.Connection, error) {
-	panic("unimplemented")
-}
-
-// CreateDraftProjectVersionForExistingProject implements gen.NuzurProductServer.
-func (s *Server) CreateDraftProjectVersionForExistingProject(context.Context, *pb.CreateDraftProjectVersionForExistingProjectRequest) (*gen.ProjectVersion, error) {
-	panic("unimplemented")
-}
-
-// CreateProject implements gen.NuzurProductServer.
-func (s *Server) CreateProject(context.Context, *pb.CreateProjectRequest) (*gen.Project, error) {
-	panic("unimplemented")
-}
-
-// CreateProjectVersion implements gen.NuzurProductServer.
-func (s *Server) CreateProjectVersion(context.Context, *pb.CreateProjectVersionRequest) (*gen.ProjectVersion, error) {
-	panic("unimplemented")
-}
-
-// CreateTeam implements gen.NuzurProductServer.
-func (s *Server) CreateTeam(context.Context, *pb.CreateTeamRequest) (*gen.Team, error) {
-	panic("unimplemented")
-}
-
-// DeleteConnectionSecret implements gen.NuzurProductServer.
-func (s *Server) DeleteConnectionSecret(context.Context, *pb.DeleteConnectionSecretRequest) (*gen.Connection, error) {
-	panic("unimplemented")
-}
-
-// DiscardDraftProjectVersion implements gen.NuzurProductServer.
-func (s *Server) DiscardDraftProjectVersion(context.Context, *pb.DiscardDraftProjectVersionRequest) (*gen.ProjectVersion, error) {
-	panic("unimplemented")
-}
-
-// GetConnectionWithSecret implements gen.NuzurProductServer.
-func (s *Server) GetConnectionWithSecret(context.Context, *pb.GetConnectionWithSecretRequest) (*gen.Connection, error) {
-	panic("unimplemented")
-}
-
-// GetLatestProjectVersion implements gen.NuzurProductServer.
-func (s *Server) GetLatestProjectVersion(context.Context, *pb.GetLatestProjectVersionRequest) (*gen.ProjectVersion, error) {
-	panic("unimplemented")
-}
+const DummyProjectUUID = "51ffef0c-0b21-4bed-bd3e-c17c2314a19b"
+const DummyProjectVersionUUID = "9605d1ac-9a44-4642-aa68-0a6d92650b91"
 
 // GetProjectForUser implements gen.NuzurProductServer.
-func (s *Server) GetProjectForUser(context.Context, *pb.GetProjectForUserRequest) (*gen.Project, error) {
+func (s *Server) GetProjectForUser(ctx context.Context, req *pb.GetProjectForUserRequest) (*gen.Project, error) {
 	return &gen.Project{
-		Uuid: uuid.Must(uuid.NewV4()).String(),
+		Uuid: req.ProjectUuid,
 		Name: "test",
 	}, nil
 }
 
 // GetProjectVersionForUser implements gen.NuzurProductServer.
-func (s *Server) GetProjectVersionForUser(context.Context, *pb.GetProjectVersionForUserRequest) (*gen.ProjectVersion, error) {
+func (s *Server) GetProjectVersionForUser(ctx context.Context, req *pb.GetProjectVersionForUserRequest) (*gen.ProjectVersion, error) {
 	return &gen.ProjectVersion{
-		Uuid: uuid.Must(uuid.NewV4()).String(),
+		Uuid: req.ProjectVersionUuid,
 	}, nil
 }
 
 // GetTeamForUser implements gen.NuzurProductServer.
-func (s *Server) GetTeamForUser(context.Context, *pb.GetTeamForUserRequest) (*gen.Team, error) {
+func (s *Server) GetTeamForUser(ctx context.Context, req *pb.GetTeamForUserRequest) (*gen.Team, error) {
 	return &gen.Team{
-		Uuid: uuid.Must(uuid.NewV4()).String(),
+		Uuid: req.TeamUuid,
 	}, nil
 }
 
-// GetUser implements gen.NuzurProductServer.
-func (s *Server) GetUser(context.Context, *pb.GetUserRequest) (*gen.User, error) {
-	panic("unimplemented")
+func (s *Server) GetExtension(ctx context.Context, req *pb.GetExtensionRequest) (*gen.Extension, error) {
+	return &gen.Extension{
+		Uuid:       req.ExtensionUuid,
+		Identifier: "test_extension",
+	}, nil
 }
 
-// InviteUserToTeam implements gen.NuzurProductServer.
-func (s *Server) InviteUserToTeam(context.Context, *pb.InviteUserToTeamRequest) (*gen.UserTeam, error) {
-	panic("unimplemented")
+func (s *Server) GetExtensionVersion(ctx context.Context, req *pb.GetExtensionVersionRequest) (*gen.ExtensionVersion, error) {
+	return &gen.ExtensionVersion{
+		Uuid: req.VersionUuid,
+	}, nil
 }
 
-// ListProjectVersions implements gen.NuzurProductServer.
-func (s *Server) ListProjectVersions(context.Context, *pb.ListProjectVersionsRequest) (*pb.ListProjectVersionsResponse, error) {
-	panic("unimplemented")
+func (s *Server) GetExtensionExecution(ctx context.Context, req *pb.GetExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
+	return &gen.ExtensionExecution{
+		Uuid:               req.ExecutionUuid,
+		ProjectUuid:        uuid.FromStringOrNil(DummyProjectUUID).String(),
+		ProjectVersionUuid: uuid.FromStringOrNil(DummyProjectVersionUUID).String(),
+	}, nil
 }
-
-// ListProjectVersionsForUser implements gen.NuzurProductServer.
-func (s *Server) ListProjectVersionsForUser(context.Context, *pb.ListProjectVersionsForUserRequest) (*pb.ListProjectVersionsForUserResponse, error) {
-	panic("unimplemented")
+func (s *Server) CreateExtensionExecution(ctx context.Context, req *pb.CreateExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
+	return req.Execution, nil
 }
-
-// ListProjectsForUser implements gen.NuzurProductServer.
-func (s *Server) ListProjectsForUser(context.Context, *pb.ListProjectsForUserRequest) (*pb.ListProjectsForUserResponse, error) {
-	panic("unimplemented")
-}
-
-// ListTeamsForUser implements gen.NuzurProductServer.
-func (s *Server) ListTeamsForUser(context.Context, *pb.ListTeamsForUserRequest) (*pb.ListTeamsForUserResponse, error) {
-	panic("unimplemented")
-}
-
-// UpdateConnectionSecret implements gen.NuzurProductServer.
-func (s *Server) UpdateConnectionSecret(context.Context, *pb.UpdateConnectionSecretRequest) (*gen.Connection, error) {
-	panic("unimplemented")
-}
-
-// UpdateProject implements gen.NuzurProductServer.
-func (s *Server) UpdateProject(context.Context, *pb.UpdateProjectRequest) (*gen.Project, error) {
-	panic("unimplemented")
-}
-
-// UpdateProjectVersion implements gen.NuzurProductServer.
-func (s *Server) UpdateProjectVersion(context.Context, *pb.UpdateProjectVersionRequest) (*gen.ProjectVersion, error) {
-	panic("unimplemented")
-}
-
-// UpdateTeam implements gen.NuzurProductServer.
-func (s *Server) UpdateTeam(context.Context, *pb.UpdateTeamRequest) (*gen.Team, error) {
-	panic("unimplemented")
-}
-
-// UploadProjectSnapshot implements gen.NuzurProductServer.
-func (s *Server) UploadProjectSnapshot(context.Context, *pb.UploadProjectSnapshotRequest) (*pb.UploadProjectSnapshotResponse, error) {
-	panic("unimplemented")
+func (s *Server) UpdateExtensionExecution(ctx context.Context, req *pb.UpdateExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
+	return req.Execution, nil
 }
