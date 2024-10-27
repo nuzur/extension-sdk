@@ -29,6 +29,9 @@ func New(params Params) *grpc.Server {
 		OnStart: func(ctx context.Context) error {
 			// GRPC port from config
 			port := os.Getenv("PORT")
+			if port == "" {
+				port = "5555"
+			}
 
 			// proto server
 			lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
