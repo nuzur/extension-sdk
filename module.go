@@ -7,8 +7,10 @@ import (
 	"go.uber.org/zap"
 )
 
-var Module = fx.Provide(
-	zap.NewProduction,
-	client.New,
+var Module = fx.Module("extensionsdk",
+	fx.Provide(
+		zap.NewProduction,
+		client.New,
+	),
 	fx.Invoke(server.New),
 )
