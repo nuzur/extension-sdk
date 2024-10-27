@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v4.24.4
-// source: extension.proto
+// source: nuzur_extension.proto
 
 package gen
 
@@ -231,5 +231,5 @@ var NuzurExtension_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "extension.proto",
+	Metadata: "nuzur_extension.proto",
 }
