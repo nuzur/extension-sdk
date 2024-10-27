@@ -2,9 +2,10 @@ package client
 
 import (
 	"crypto/x509"
-	"errors"
+	"path/filepath"
+	"runtime"
 
-	"github.com/gofrs/uuid"
+	"github.com/nuzur/extension-sdk/config"
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -14,32 +15,29 @@ import (
 type Client struct {
 	conn          *grpc.ClientConn
 	productClient pb.NuzurProductClient
-
-	ExtensionUUID        string // this needs to be created before hand
-	ExtensionVersionUUID string // this needs to be created before hand
-	ExtensionName        string // returned by the metadata endpoint to identify the extension
-	ExtensionAuthor      string // returned by the metadata endpoint to identify the extension
-	NumberOfSteps        int32  // returned by the metadata endpoint
+	metadata      *config.ExtensionConfigMetadata
 }
 
 type Params struct {
-	ExtensionUUID        string // this needs to be created before hand
-	ExtensionVersionUUID string // this needs to be created before hand
-	ExtensionName        string // returned by the metadata endpoint to identify the extension
-	ExtensionAuthor      string // returned by the metadata endpoint to identify the extension
-	NumberOfSteps        int32  // returned by the metadata endpoint
-
-	API_ADDRESS *string // to enable testing
-	DisableTLS  bool    // to enable testing
+	ConfigPath  *string
+	API_ADDRESS *string
+	DisableTLS  bool
 }
 
 func New(params Params) (*Client, error) {
-
-	if uuid.FromStringOrNil(params.ExtensionUUID) == uuid.Nil {
-		return nil, errors.New("please provide a valid extension uuid")
+	configPath := filepath.Join(RootPath(), "config")
+	if params.ConfigPath != nil {
+		configPath = *params.ConfigPath
 	}
-	if uuid.FromStringOrNil(params.ExtensionVersionUUID) == uuid.Nil {
-		return nil, errors.New("please provide a valid extension version uuid")
+	configProvider, err := config.New(configPath)
+	if err != nil {
+		return nil, err
+	}
+
+	metadata := config.ExtensionConfigMetadata{}
+	err = configProvider.Get(METADATA).Populate(&metadata)
+	if err != nil {
+		return nil, err
 	}
 
 	var opts []grpc.DialOption
@@ -70,11 +68,16 @@ func New(params Params) (*Client, error) {
 	return &Client{
 		conn:          conn,
 		productClient: productClient,
-
-		ExtensionUUID:        params.ExtensionUUID,
-		ExtensionVersionUUID: params.ExtensionVersionUUID,
-		ExtensionName:        params.ExtensionName,
-		ExtensionAuthor:      params.ExtensionAuthor,
-		NumberOfSteps:        params.NumberOfSteps,
+		metadata:      &metadata,
 	}, nil
+}
+
+func RootPath() string {
+	_, callerFile, _, _ := runtime.Caller(1)
+	generatorDir := filepath.Dir(callerFile)
+	absoluteGeneratorDir, err := filepath.Abs(generatorDir)
+	if err != nil {
+		panic("could not resolve path")
+	}
+	return filepath.Dir(absoluteGeneratorDir)
 }
