@@ -7,6 +7,7 @@ import (
 
 	"github.com/nuzur/extension-sdk/config"
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
+	"go.uber.org/fx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
@@ -19,9 +20,11 @@ type Client struct {
 }
 
 type Params struct {
-	ConfigPath  *string
-	API_ADDRESS *string
-	DisableTLS  bool
+	fx.In
+
+	ConfigPath  *string `optional:"true"`
+	API_ADDRESS *string `optional:"true"`
+	DisableTLS  bool    `optional:"true"`
 }
 
 func New(params Params) (*Client, error) {
