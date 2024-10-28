@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/gofrs/uuid"
+	pb "github.com/nuzur/extension-sdk/idl/gen"
 	"github.com/nuzur/extension-sdk/proto_deps/gen"
 	nemgen "github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
 )
@@ -59,7 +60,7 @@ type UpdateExecutionRequest struct {
 	ExecutionUUID      uuid.UUID
 	ProjectUUID        uuid.UUID
 	ProjectVersionUUID uuid.UUID
-	Status             nemgen.ExtensionExecutionStatus
+	Status             pb.ExecutionStatus
 	StatusMsg          string
 	Metadata           string
 }
@@ -99,9 +100,25 @@ func (c *Client) UpdateExecution(ctx context.Context, req UpdateExecutionRequest
 			ProjectExtensionUuid: existingExec.ProjectExtensionUuid,
 			ExecutedByUuid:       existingExec.ExecutedByUuid,
 			Metadata:             req.Metadata,
-			Status:               req.Status,
+			Status:               mapExtensionStatus(req.Status),
 			StatusMsg:            req.StatusMsg,
 		},
 	})
 
+}
+
+func mapExtensionStatus(in pb.ExecutionStatus) nemgen.ExtensionExecutionStatus {
+	switch in {
+	case pb.ExecutionStatus_EXECUTION_STATUS_INVALID:
+		return nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_INVALID
+	case pb.ExecutionStatus_EXECUTION_STATUS_INPROGRESS:
+		return nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_INPROGRESS
+	case pb.ExecutionStatus_EXECUTION_STATUS_SUCCEEDED:
+		return nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_SUCCEEDED
+	case pb.ExecutionStatus_EXECUTION_STATUS_FAILED:
+		return nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_FAILED
+	case pb.ExecutionStatus_EXECUTION_STATUS_CANCELLED:
+		return nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_CANCELLED
+	}
+	return nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_INVALID
 }
