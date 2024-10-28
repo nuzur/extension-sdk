@@ -26,7 +26,7 @@ message StartExecutionRequest {
     string project_uuid = 1;
     string project_version_uuid = 2;
     string project_extension_uuid = 3;     // for automatic extension execution   
-    map<string, string> config_values = 4; // for manual extensionexecution
+    string config_values = 4; // for manual extensionexecution
 }
 
 enum ExecutionResponseType {
