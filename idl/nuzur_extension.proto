@@ -9,7 +9,7 @@ service NuzurExtension {
     rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
     rpc StartExecution(StartExecutionRequest) returns (StartExecutionResponse) {}
     rpc SubmitExectuionStep(SubmitExectuionStepRequest) returns (SubmitExectuionStepResponse) {}
-    rpc GetExecutionStatus(GetExecutionStatusRequest) returns (GetExecutionStatusResponse) {}
+    rpc GetExecution(GetExecutionRequest) returns (GetExecutionResponse) {}
 }
 
 message GetMetadataRequest {}
@@ -25,13 +25,15 @@ message GetMetadataResponse {
 message StartExecutionRequest {
     string project_uuid = 1;
     string project_version_uuid = 2;
-    string project_extension_uuid = 3; // for automatic extension execution     
+    string project_extension_uuid = 3;     // for automatic extension execution   
+    map<string, string> config_values = 4; // for manual extensionexecution
 }
 
 enum ExecutionResponseType {
     EXECUTION_RESPONSE_TYPE_INVALID = 0;
     EXECUTION_RESPONSE_TYPE_FINAL = 1;
     EXECUTION_RESPONSE_TYPE_STEP = 2;
+    EXECUTION_RESPONSE_TYPE_ASYNC = 3;
 }
 
 message StartExecutionResponse {
@@ -116,16 +118,18 @@ message SubmitExectuionStepResponse {
     ExecutionResponseTypeData data = 3;
 }
 
-message GetExecutionStatusRequest {
+message GetExecutionRequest {
     string execution_uuid = 1;
 }
 
-message GetExecutionStatusResponse {
+message GetExecutionResponse {
     ExecutionStatus status = 1;
     string status_msg = 2;
-    string time_elapsed = 3;
-    string estimated_time_remaining = 4;
-    string current_step = 5; 
+    ExecutionResponseType type = 3;
+    ExecutionResponseTypeData data = 4; 
+    string time_elapsed = 5;
+    string estimated_time_remaining = 6;
+    string current_step_identifier = 7; 
 }
 
 
