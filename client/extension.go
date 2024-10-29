@@ -52,6 +52,7 @@ func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest
 			ProjectUuid:          req.ProjectUUID.String(),
 			ProjectVersionUuid:   req.ProjectVersionUUID.String(),
 			ProjectExtensionUuid: req.ProjectExtensionUUID.String(),
+			Metadata:             req.Metadata,
 		},
 	})
 }
