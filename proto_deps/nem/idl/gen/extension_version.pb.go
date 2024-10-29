@@ -189,7 +189,7 @@ type ExtensionVersion struct {
 	RepositoryTag       string                          `protobuf:"bytes,5,opt,name=repository_tag,json=repositoryTag,proto3" json:"repository_tag,omitempty"`
 	ConfigurationEntity string                          `protobuf:"bytes,6,opt,name=configuration_entity,json=configurationEntity,proto3" json:"configuration_entity,omitempty"`
 	ExecutionMode       []ExtensionVersionExecutionMode `protobuf:"varint,7,rep,packed,name=execution_mode,json=executionMode,proto3,enum=nem.ExtensionVersionExecutionMode" json:"execution_mode,omitempty"`
-	ReviewStatus        []ExtensionVersionReviewStatus  `protobuf:"varint,8,rep,packed,name=review_status,json=reviewStatus,proto3,enum=nem.ExtensionVersionReviewStatus" json:"review_status,omitempty"`
+	ReviewStatus        ExtensionVersionReviewStatus    `protobuf:"varint,8,opt,name=review_status,json=reviewStatus,proto3,enum=nem.ExtensionVersionReviewStatus" json:"review_status,omitempty"`
 	Status              ExtensionVersionStatus          `protobuf:"varint,9,opt,name=status,proto3,enum=nem.ExtensionVersionStatus" json:"status,omitempty"`
 	CreatedAt           *timestamppb.Timestamp          `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt           *timestamppb.Timestamp          `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
@@ -276,11 +276,11 @@ func (x *ExtensionVersion) GetExecutionMode() []ExtensionVersionExecutionMode {
 	return nil
 }
 
-func (x *ExtensionVersion) GetReviewStatus() []ExtensionVersionReviewStatus {
+func (x *ExtensionVersion) GetReviewStatus() ExtensionVersionReviewStatus {
 	if x != nil {
 		return x.ReviewStatus
 	}
-	return nil
+	return ExtensionVersionReviewStatus_EXTENSION_VERSION_REVIEW_STATUS_INVALID
 }
 
 func (x *ExtensionVersion) GetStatus() ExtensionVersionStatus {
@@ -345,7 +345,7 @@ var file_extension_version_proto_rawDesc = []byte{
 	0x73, 0x69, 0x6f, 0x6e, 0x45, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x4d, 0x6f, 0x64,
 	0x65, 0x52, 0x0d, 0x65, 0x78, 0x65, 0x63, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x4d, 0x6f, 0x64, 0x65,
 	0x12, 0x46, 0x0a, 0x0d, 0x72, 0x65, 0x76, 0x69, 0x65, 0x77, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75,
-	0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x0e, 0x32, 0x21, 0x2e, 0x6e, 0x65, 0x6d, 0x2e, 0x45, 0x78,
+	0x73, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x21, 0x2e, 0x6e, 0x65, 0x6d, 0x2e, 0x45, 0x78,
 	0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65,
 	0x76, 0x69, 0x65, 0x77, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x0c, 0x72, 0x65, 0x76, 0x69,
 	0x65, 0x77, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x33, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74,

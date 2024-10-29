@@ -44,6 +44,8 @@ const (
 	NuzurProduct_UpdateProjectVersion_FullMethodName                        = "/NuzurProduct/UpdateProjectVersion"
 	NuzurProduct_DiscardDraftProjectVersion_FullMethodName                  = "/NuzurProduct/DiscardDraftProjectVersion"
 	NuzurProduct_UploadProjectSnapshot_FullMethodName                       = "/NuzurProduct/UploadProjectSnapshot"
+	NuzurProduct_UploadExtensionExecutionFile_FullMethodName                = "/NuzurProduct/UploadExtensionExecutionFile"
+	NuzurProduct_GetSignedFileURL_FullMethodName                            = "/NuzurProduct/GetSignedFileURL"
 	NuzurProduct_ListExtensions_FullMethodName                              = "/NuzurProduct/ListExtensions"
 	NuzurProduct_GetExtension_FullMethodName                                = "/NuzurProduct/GetExtension"
 	NuzurProduct_CreateExtension_FullMethodName                             = "/NuzurProduct/CreateExtension"
@@ -90,8 +92,10 @@ type NuzurProductClient interface {
 	CreateDraftProjectVersionForExistingProject(ctx context.Context, in *CreateDraftProjectVersionForExistingProjectRequest, opts ...grpc.CallOption) (*gen.ProjectVersion, error)
 	UpdateProjectVersion(ctx context.Context, in *UpdateProjectVersionRequest, opts ...grpc.CallOption) (*gen.ProjectVersion, error)
 	DiscardDraftProjectVersion(ctx context.Context, in *DiscardDraftProjectVersionRequest, opts ...grpc.CallOption) (*gen.ProjectVersion, error)
-	// upload files
+	// files
 	UploadProjectSnapshot(ctx context.Context, in *UploadProjectSnapshotRequest, opts ...grpc.CallOption) (*UploadProjectSnapshotResponse, error)
+	UploadExtensionExecutionFile(ctx context.Context, in *UploadExtensionExecutionFileRequest, opts ...grpc.CallOption) (*UploadExtensionExecutionFileResponse, error)
+	GetSignedFileURL(ctx context.Context, in *GetSignedFileURLRequest, opts ...grpc.CallOption) (*GetSignedFileURLResponse, error)
 	// extensions
 	ListExtensions(ctx context.Context, in *ListExtensionsRequest, opts ...grpc.CallOption) (*ListExtensionsResponse, error)
 	GetExtension(ctx context.Context, in *GetExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error)
@@ -357,6 +361,26 @@ func (c *nuzurProductClient) UploadProjectSnapshot(ctx context.Context, in *Uplo
 	return out, nil
 }
 
+func (c *nuzurProductClient) UploadExtensionExecutionFile(ctx context.Context, in *UploadExtensionExecutionFileRequest, opts ...grpc.CallOption) (*UploadExtensionExecutionFileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UploadExtensionExecutionFileResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_UploadExtensionExecutionFile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) GetSignedFileURL(ctx context.Context, in *GetSignedFileURLRequest, opts ...grpc.CallOption) (*GetSignedFileURLResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSignedFileURLResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_GetSignedFileURL_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nuzurProductClient) ListExtensions(ctx context.Context, in *ListExtensionsRequest, opts ...grpc.CallOption) (*ListExtensionsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListExtensionsResponse)
@@ -509,8 +533,10 @@ type NuzurProductServer interface {
 	CreateDraftProjectVersionForExistingProject(context.Context, *CreateDraftProjectVersionForExistingProjectRequest) (*gen.ProjectVersion, error)
 	UpdateProjectVersion(context.Context, *UpdateProjectVersionRequest) (*gen.ProjectVersion, error)
 	DiscardDraftProjectVersion(context.Context, *DiscardDraftProjectVersionRequest) (*gen.ProjectVersion, error)
-	// upload files
+	// files
 	UploadProjectSnapshot(context.Context, *UploadProjectSnapshotRequest) (*UploadProjectSnapshotResponse, error)
+	UploadExtensionExecutionFile(context.Context, *UploadExtensionExecutionFileRequest) (*UploadExtensionExecutionFileResponse, error)
+	GetSignedFileURL(context.Context, *GetSignedFileURLRequest) (*GetSignedFileURLResponse, error)
 	// extensions
 	ListExtensions(context.Context, *ListExtensionsRequest) (*ListExtensionsResponse, error)
 	GetExtension(context.Context, *GetExtensionRequest) (*gen.Extension, error)
@@ -607,6 +633,12 @@ func (UnimplementedNuzurProductServer) DiscardDraftProjectVersion(context.Contex
 }
 func (UnimplementedNuzurProductServer) UploadProjectSnapshot(context.Context, *UploadProjectSnapshotRequest) (*UploadProjectSnapshotResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadProjectSnapshot not implemented")
+}
+func (UnimplementedNuzurProductServer) UploadExtensionExecutionFile(context.Context, *UploadExtensionExecutionFileRequest) (*UploadExtensionExecutionFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadExtensionExecutionFile not implemented")
+}
+func (UnimplementedNuzurProductServer) GetSignedFileURL(context.Context, *GetSignedFileURLRequest) (*GetSignedFileURLResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSignedFileURL not implemented")
 }
 func (UnimplementedNuzurProductServer) ListExtensions(context.Context, *ListExtensionsRequest) (*ListExtensionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListExtensions not implemented")
@@ -1097,6 +1129,42 @@ func _NuzurProduct_UploadProjectSnapshot_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_UploadExtensionExecutionFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadExtensionExecutionFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UploadExtensionExecutionFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UploadExtensionExecutionFile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UploadExtensionExecutionFile(ctx, req.(*UploadExtensionExecutionFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_GetSignedFileURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSignedFileURLRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).GetSignedFileURL(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_GetSignedFileURL_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).GetSignedFileURL(ctx, req.(*GetSignedFileURLRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NuzurProduct_ListExtensions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListExtensionsRequest)
 	if err := dec(in); err != nil {
@@ -1415,6 +1483,14 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadProjectSnapshot",
 			Handler:    _NuzurProduct_UploadProjectSnapshot_Handler,
+		},
+		{
+			MethodName: "UploadExtensionExecutionFile",
+			Handler:    _NuzurProduct_UploadExtensionExecutionFile_Handler,
+		},
+		{
+			MethodName: "GetSignedFileURL",
+			Handler:    _NuzurProduct_GetSignedFileURL_Handler,
 		},
 		{
 			MethodName: "ListExtensions",
