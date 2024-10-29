@@ -29,7 +29,7 @@ func New() (*Server, error) {
 				return nil, errors.New("missing metadata")
 			}
 			if len(meta["authorization"]) != 1 {
-				return nil, errors.New("authorization metadata not found")
+				return nil, errors.New("[sdk] authorization metadata not found ")
 			}
 			return handler(ctx, req)
 		}),
