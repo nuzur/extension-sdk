@@ -29,7 +29,7 @@ type Params struct {
 }
 
 func New(params Params) (*Client, error) {
-	configPath := filepath.Join(RootPath(), "config")
+	configPath := filepath.Join(CurrentPath(), "config")
 	if params.ConfigPath != nil {
 		configPath = *params.ConfigPath
 	}
@@ -76,7 +76,7 @@ func New(params Params) (*Client, error) {
 	}, nil
 }
 
-func RootPath() string {
+func CurrentPath() string {
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
