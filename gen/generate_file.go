@@ -33,7 +33,7 @@ type FileRequest struct {
 	DisableGoFormat bool
 }
 
-func GenerateFile(ctx context.Context, req FileRequest) error {
+func GenerateFile(ctx context.Context, req FileRequest) ([]byte, error) {
 	funcs := template.FuncMap{}
 	for n, f := range req.Funcs {
 		funcs[n] = f
@@ -46,7 +46,7 @@ func GenerateFile(ctx context.Context, req FileRequest) error {
 	data, err := os.ReadFile(templateFilePath)
 	if err != nil {
 		fmt.Println("reading error", err)
-		return err
+		return nil, err
 	}
 
 	// instantiate the template
@@ -54,7 +54,7 @@ func GenerateFile(ctx context.Context, req FileRequest) error {
 	if err != nil {
 		fmt.Printf("Template Error: %v\n ", req.TemplateName)
 		fmt.Printf("Template Error: %v\n ", err)
-		return fmt.Errorf("error with provided template: %w", err)
+		return nil, fmt.Errorf("error with provided template: %w", err)
 	}
 
 	// execute with data
@@ -62,7 +62,7 @@ func GenerateFile(ctx context.Context, req FileRequest) error {
 	err = t.Execute(&buf, req.Data)
 	if err != nil {
 		fmt.Printf("Execute Error: %v\n err:%v\n", req, err)
-		return fmt.Errorf("error executing template")
+		return nil, fmt.Errorf("error executing template")
 	}
 
 	output := buf.Bytes()
@@ -82,9 +82,9 @@ func GenerateFile(ctx context.Context, req FileRequest) error {
 	finalOutput := path.Join(rootDir, "executions", req.ExecutionUUID, req.OutputFile)
 	err = write(finalOutput, output)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return output, nil
 }
 
 func write(filename string, b []byte) error {

@@ -12,7 +12,7 @@ import (
 )
 
 func TestGenerateFile(t *testing.T) {
-	err := GenerateFile(context.Background(), FileRequest{
+	output, err := GenerateFile(context.Background(), FileRequest{
 		ExecutionUUID: "123",
 		OutputFile:    "/folder/test.txt",
 		TemplateName:  "test",
@@ -23,6 +23,7 @@ func TestGenerateFile(t *testing.T) {
 		DisableGoFormat: true,
 	})
 
+	assert.NotNil(t, output)
 	assert.NoError(t, err)
 	rootDir := client.CurrentPath()
 	finalOutput := path.Join(rootDir, "executions", "123", "folder", "test.txt")
