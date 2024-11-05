@@ -5,10 +5,10 @@ import (
 	"context"
 	"fmt"
 	"go/format"
-	"html/template"
 	"os"
 	"path"
 	"path/filepath"
+	"text/template"
 
 	"github.com/nuzur/extension-sdk/client"
 )
