@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net"
 
+	"math/rand"
+
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -17,11 +19,13 @@ import (
 type Server struct {
 	pb.UnimplementedNuzurProductServer
 	grpcServer *grpc.Server
+	port       string
 }
 
-const grpcPort = "5505"
-
 func New() (*Server, error) {
+	min := 5000
+	max := 6000
+	grpcPort := fmt.Sprintf("%d", rand.Intn(max-min)+min)
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 			meta, ok := metadata.FromIncomingContext(ctx)
@@ -45,6 +49,7 @@ func New() (*Server, error) {
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
 	server := &Server{
 		grpcServer: s,
+		port:       grpcPort,
 	}
 	pb.RegisterNuzurProductServer(s, server)
 	reflection.Register(s)
@@ -58,6 +63,6 @@ func (s *Server) Stop() {
 }
 
 func (s *Server) Address() *string {
-	addr := fmt.Sprintf("localhost:%s", grpcPort)
+	addr := fmt.Sprintf("localhost:%s", s.port)
 	return &addr
 }
