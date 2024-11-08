@@ -150,12 +150,13 @@ enum ExtensionInputType {
 }
 
 message ExtensionInputField {
-    string identifier = 1;
-    string display_name = 2;
-    string description = 3;
-    bool required = 4;  
-    ExtensionInputType type = 5;
-    ExtensionInputTypeConfig type_config = 6;
+    string uuid = 1;
+    string identifier = 2;
+    string display_name = 3;
+    string description = 4;
+    bool required = 5;  
+    ExtensionInputType type = 6;
+    ExtensionInputTypeConfig type_config = 7;
 }
 
 message ExtensionInputTypeConfig {
@@ -164,9 +165,8 @@ message ExtensionInputTypeConfig {
     ExtensionInputTypeArrayConfig array = 3;
 }
 
-message ExtensionInputTypeUUIDConfig {
-    bool validate_project_entity = 1;
-    ProjectEntityType project_entity_type = 2; 
+message ExtensionInputTypeUUIDConfig {    
+    ProjectEntityType project_entity_type = 1; 
 }
 
 message ExtensionInputTypeEnumConfig {
@@ -174,12 +174,9 @@ message ExtensionInputTypeEnumConfig {
     repeated ExtensionInputEnumOption options = 2;
 }
 
-message ExtensionInputTypeArrayConfig {
-    int64 min_elements = 1;
-    int64 max_elements = 2;
-    bool enforce_unique = 3;
-    ExtensionInputType array_type = 4;
-    ExtensionInputTypeConfig array_type_config = 5;
+message ExtensionInputTypeArrayConfig {    
+    ExtensionInputType array_type = 1;
+    ExtensionInputTypeConfig array_type_config = 2;
 }
 
 enum ProjectEntityType { 
