@@ -12,6 +12,9 @@ service NuzurExtension {
     rpc GetExecution(GetExecutionRequest) returns (GetExecutionResponse) {}
 }
 
+
+
+// start metadata 
 message GetMetadataRequest {}
 
 message GetMetadataResponse {
@@ -22,6 +25,10 @@ message GetMetadataResponse {
     int32 numberOfSteps = 5;
 }
 
+// end metadata 
+
+
+// start startexec
 message StartExecutionRequest {
     string project_uuid = 1;
     string project_version_uuid = 2;
@@ -36,6 +43,21 @@ enum ExecutionResponseType {
     EXECUTION_RESPONSE_TYPE_ASYNC = 3;
 }
 
+enum ExecutionStatus {
+    EXECUTION_STATUS_INVALID = 0;
+    EXECUTION_STATUS_INPROGRESS = 1;
+    EXECUTION_STATUS_SUCCEEDED = 2;
+    EXECUTION_STATUS_FAILED = 3;
+    EXECUTION_STATUS_CANCELLED = 4;
+}
+
+enum ExecutionStepType {
+    EXECUTION_STEP_TYPE_INVALID = 0;
+    EXECUTION_STEP_TYPE_CONFIRMATION = 1;
+    EXECUTION_STEP_TYPE_DATAREQUEST = 2;
+    EXECUTION_STEP_TYPE_DATAREQUEST_AND_CONFIRMATION = 3;
+}
+
 message StartExecutionResponse {
     string execution_uuid = 1;
     ExecutionResponseType type = 2;
@@ -47,19 +69,18 @@ message ExecutionResponseTypeData {
     ExecutionResponseTypeStepData step = 2;
 }
 
-enum ExecutionStatus {
-    EXECUTION_STATUS_INVALID = 0;
-    EXECUTION_STATUS_INPROGRESS = 1;
-    EXECUTION_STATUS_SUCCEEDED = 2;
-    EXECUTION_STATUS_FAILED = 3;
-    EXECUTION_STATUS_CANCELLED = 4;
-}
-
 message ExecutionResponseTypeFinalData {
     ExecutionStatus status = 1;
     string status_message = 2;
     string file_download_url = 3;
     repeated ExecutionResponseDisplayBlock display_blocks = 4;
+}
+
+message ExecutionResponseTypeStepData {
+    string step_identifier = 1;
+    ExecutionStepType type = 2;
+    ExecutionResponseDisplayBlock display_block = 3;
+    repeated ExtensionInputField inputs_fields = 4;
 }
 
 message ExecutionResponseDisplayBlock {
@@ -69,39 +90,10 @@ message ExecutionResponseDisplayBlock {
     string content = 4;
 }
 
-enum ExecutionStepType {
-    EXECUTION_STEP_TYPE_INVALID = 0;
-    EXECUTION_STEP_TYPE_CONFIRMATION = 1;
-    EXECUTION_STEP_TYPE_DATAREQUEST = 2;
-    EXECUTION_STEP_TYPE_DATAREQUEST_AND_CONFIRMATION = 3;
-}
+// end startexec
 
-message ExecutionResponseTypeStepData {
-    string step_identifier = 1;
-    ExecutionStepType type = 2;
-    ExecutionResponseDisplayBlock display_block = 3;
-    repeated ExecutionStepDataInput data_inputs = 4;
-}
 
-enum ExecutionStepDataInputType {
-    EXECUTION_STEP_DATA_INPUT_TYPE_INVALID = 0;
-    EXECUTION_STEP_DATA_INPUT_TYPE_UUID = 1;
-    EXECUTION_STEP_DATA_INPUT_TYPE_INTEGER = 2;
-    EXECUTION_STEP_DATA_INPUT_TYPE_FLOAT = 3;    
-    EXECUTION_STEP_DATA_INPUT_TYPE_BOOLEAN = 4;
-    EXECUTION_STEP_DATA_INPUT_TYPE_STRING = 5;
-    EXECUTION_STEP_DATA_INPUT_TYPE_DATE = 6;
-    EXECUTION_STEP_DATA_INPUT_TYPE_DATETIME = 7;
-}
-
-message ExecutionStepDataInput {
-    string identifier = 1;
-    string display_name = 2;
-    string description = 3;
-    ExecutionStepDataInputType type = 4;  
-    bool required = 5;    
-}
-
+// start submit step 
 message SubmitExectuionStepRequest {
     string step_identifier = 1;
     bool confrimed = 2;
@@ -118,7 +110,10 @@ message SubmitExectuionStepResponse {
     ExecutionResponseType type = 2;
     ExecutionResponseTypeData data = 3;
 }
+// end submit step 
 
+
+// start get exec
 message GetExecutionRequest {
     string execution_uuid = 1;
 }
@@ -132,6 +127,75 @@ message GetExecutionResponse {
     string estimated_time_remaining = 6;
     string current_step_identifier = 7; 
 }
+// end get exec
+
+
+// start configuration entity 
+message ExtensionConfigurationEntity {
+    string version = 1;
+    repeated ExtensionInputField fields = 2;
+}
+
+enum ExtensionInputType {
+    EXTENSION_INPUT_TYPE_INVALID = 0;
+    EXTENSION_INPUT_TYPE_UUID = 1;
+    EXTENSION_INPUT_TYPE_INTEGER = 2;
+    EXTENSION_INPUT_TYPE_FLOAT = 3;    
+    EXTENSION_INPUT_TYPE_BOOLEAN = 4;
+    EXTENSION_INPUT_TYPE_STRING = 5;
+    EXTENSION_INPUT_TYPE_DATE = 6;
+    EXTENSION_INPUT_TYPE_DATETIME = 7;
+    EXTENSION_INPUT_TYPE_ENUM = 8;
+    EXTENSION_INPUT_TYPE_ARRAY = 9;
+}
+
+message ExtensionInputField {
+    string identifier = 1;
+    string display_name = 2;
+    string description = 3;
+    bool required = 4;  
+    ExtensionInputType type = 5;
+    ExtensionInputTypeConfig type_config = 6;
+}
+
+message ExtensionInputTypeConfig {
+    ExtensionInputTypeUUIDConfig uuid = 1;
+    ExtensionInputTypeEnumConfig enum = 2;
+    ExtensionInputTypeArrayConfig array = 3;
+}
+
+message ExtensionInputTypeUUIDConfig {
+    bool validate_project_entity = 1;
+    ProjectEntityType project_entity_type = 2; 
+}
+
+message ExtensionInputTypeEnumConfig {
+    bool allow_multiple = 1;  
+    repeated ExtensionInputEnumOption options = 2;
+}
+
+message ExtensionInputTypeArrayConfig {
+    int64 min_elements = 1;
+    int64 max_elements = 2;
+    bool enforce_unique = 3;
+    ExtensionInputType array_type = 4;
+    ExtensionInputTypeConfig array_type_config = 5;
+}
+
+enum ProjectEntityType { 
+    PROJECT_ENTITY_TYPE_INVALID = 0;
+    PROJECT_ENTITY_TYPE_ENTITY = 1;
+    PROJECT_ENTITY_TYPE_FIELD = 2;
+    PROJECT_ENTITY_TYPE_ENUM = 3;
+    PROJECT_ENTITY_TYPE_INDEX = 4;
+}
+
+message ExtensionInputEnumOption {
+    string identifier = 1;
+    string value = 2;
+}
+
+// end configuration entity 
 
 
 
