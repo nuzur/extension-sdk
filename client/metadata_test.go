@@ -22,7 +22,7 @@ func TestMetadata(t *testing.T) {
 
 	assert.NotNil(t, metadata)
 	assert.NotNil(t, metadata.Uuid)
-	assert.Equal(t, metadata.Name, "sdk")
-	assert.Equal(t, metadata.Author, "nuzur")
+	assert.Equal(t, metadata.Identifier, "sdk")
+	assert.Equal(t, metadata.DisplayName, "SDK")
 	assert.Equal(t, metadata.NumberOfSteps, int32(1))
 }

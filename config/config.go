@@ -14,8 +14,9 @@ type ExtensionConfig struct {
 type ExtensionConfigMetadata struct {
 	UUID        string `yaml:"uuid"`
 	VersionUUID string `yaml:"version_uuid"`
-	Name        string `yaml:"name"`
-	Author      string `yaml:"author"`
+	Identifier  string `yaml:"identifier"`
+	DisplayName string `yaml:"display_name"`
+	Description string `yaml:"description"`
 	Steps       int32  `yaml:"steps"`
 }
 

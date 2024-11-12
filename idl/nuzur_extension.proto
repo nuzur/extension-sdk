@@ -23,10 +23,9 @@ message GetMetadataResponse {
     string uuid = 1;
     string version_uuid = 2;
     string identifier = 3;
-    string display_name = 4;    
-    string display_author_name = 5;
-    string description = 6;
-    int32 numberOfSteps = 7;
+    string display_name = 4;        
+    string description = 5;
+    int32 numberOfSteps = 6;
 }
 
 // end metadata 

@@ -10,8 +10,9 @@ func (c *Client) GetMetadata(context.Context, *pb.GetMetadataRequest) (*pb.GetMe
 	return &pb.GetMetadataResponse{
 		Uuid:          c.metadata.UUID,
 		VersionUuid:   c.metadata.VersionUUID,
-		Name:          c.metadata.Name,
-		Author:        c.metadata.Author,
+		Identifier:    c.metadata.Identifier,
+		DisplayName:   c.metadata.DisplayName,
+		Description:   c.metadata.Description,
 		NumberOfSteps: c.metadata.Steps,
 	}, nil
 }
