@@ -15,14 +15,18 @@ service NuzurExtension {
 
 
 // start metadata 
-message GetMetadataRequest {}
+message GetMetadataRequest {
+    string locale = 1;
+}
 
 message GetMetadataResponse {
     string uuid = 1;
     string version_uuid = 2;
-    string name = 3;
-    string author = 4;
-    int32 numberOfSteps = 5;
+    string identifier = 3;
+    string display_name = 4;    
+    string display_author_name = 5;
+    string description = 6;
+    int32 numberOfSteps = 7;
 }
 
 // end metadata 
@@ -34,6 +38,7 @@ message StartExecutionRequest {
     string project_version_uuid = 2;
     string project_extension_uuid = 3;     // for automatic extension execution   
     string config_values = 4; // for manual extensionexecution
+    string locale = 5;
 }
 
 enum ExecutionResponseType {
@@ -98,6 +103,7 @@ message SubmitExectuionStepRequest {
     string step_identifier = 1;
     bool confrimed = 2;
     repeated ExecutionStepDataInputValue input_values = 3;
+    string locale = 4;
 }
 
 message ExecutionStepDataInputValue {
@@ -116,6 +122,7 @@ message SubmitExectuionStepResponse {
 // start get exec
 message GetExecutionRequest {
     string execution_uuid = 1;
+    string locale = 2;
 }
 
 message GetExecutionResponse {
