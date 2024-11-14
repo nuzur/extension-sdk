@@ -12,6 +12,7 @@ import (
 type BaseDependenciesRequest struct {
 	ProjectUUID        uuid.UUID
 	ProjectVersionUUID uuid.UUID
+	IncludeTeam        bool
 }
 
 type BaseDependenciesResponse struct {
@@ -58,6 +59,15 @@ func (c *Client) GetBaseDependencies(ctx context.Context, req BaseDependenciesRe
 			return err
 		}
 		res.Project = project
+
+		if req.IncludeTeam {
+			// get team
+			team, err := c.GetTeam(ctx, uuid.FromStringOrNil(res.Project.TeamUuid))
+			if err != nil {
+				return err
+			}
+			res.Team = team
+		}
 		return nil
 	})
 
@@ -76,13 +86,5 @@ func (c *Client) GetBaseDependencies(ctx context.Context, req BaseDependenciesRe
 		return nil, err
 	}
 
-	if res.Project != nil {
-
-		team, err := c.GetTeam(ctx, uuid.FromStringOrNil(res.Project.TeamUuid))
-		if err != nil {
-			return nil, err
-		}
-		res.Team = team
-	}
 	return &res, nil
 }
