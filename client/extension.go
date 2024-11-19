@@ -23,9 +23,19 @@ func (c *Client) GetExtensionVersion(ctx context.Context, extensionVersionUUID u
 }
 
 func (c *Client) GetExecution(ctx context.Context, extensionExecutionUUID uuid.UUID) (*nemgen.ExtensionExecution, error) {
-	return c.productClient.GetExtensionExecution(ctx, &gen.GetExtensionExecutionRequest{
+	exec, err := c.productClient.GetExtensionExecution(ctx, &gen.GetExtensionExecutionRequest{
 		ExecutionUuid: extensionExecutionUUID.String(),
 	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if exec.ExtensionUuid != c.metadata.UUID {
+		return nil, errors.New("extension uuid missmatch")
+	}
+
+	return exec, nil
 }
 
 type CreateExecutionRequest struct {
