@@ -8,6 +8,7 @@ import (
 	pb "github.com/nuzur/extension-sdk/idl/gen"
 	"github.com/nuzur/extension-sdk/proto_deps/gen"
 	nemgen "github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func (c *Client) GetExtension(ctx context.Context, extensionUUID uuid.UUID) (*nemgen.Extension, error) {
@@ -113,6 +114,7 @@ func (c *Client) UpdateExecution(ctx context.Context, req UpdateExecutionRequest
 			Metadata:             req.Metadata,
 			Status:               mapExtensionStatus(req.Status),
 			StatusMsg:            req.StatusMsg,
+			UpdatedAt:            timestamppb.Now(),
 		},
 	})
 
