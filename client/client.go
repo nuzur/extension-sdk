@@ -50,6 +50,7 @@ func New(params Params) (*Client, error) {
 		return nil, err
 	}
 
+	// translations
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	translationPath := filepath.Join(CurrentPath(), "translations")
