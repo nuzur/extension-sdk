@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"github.com/gofrs/uuid"
@@ -14,15 +15,15 @@ type ResolveConfigValuesRequest struct {
 	RawConfigValues      string
 }
 
-func (c *Client) ResolveConfigValues(ctx context.Context, req ResolveConfigValuesRequest) (*string, error) {
+func (c *Client) ResolveConfigValues(ctx context.Context, req ResolveConfigValuesRequest, values any) error {
 	if req.ProjectExtensionUUID == uuid.Nil && len(req.RawConfigValues) == 0 {
-		return nil, errors.New("missing config data")
+		return errors.New("missing config data")
 	}
 
 	if req.ProjectExtensionUUID != uuid.Nil {
 		project, err := c.GetProject(ctx, req.ProjectUUID)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		var projectExtension *gen.ProjectExtension = nil
@@ -33,11 +34,16 @@ func (c *Client) ResolveConfigValues(ctx context.Context, req ResolveConfigValue
 		}
 
 		if projectExtension == nil {
-			return nil, errors.New("project extension not found in project")
+			return errors.New("project extension not found in project")
 		}
 
-		return &projectExtension.ConfigurationEntityValues, nil
+		err = json.Unmarshal([]byte(projectExtension.ConfigurationEntityValues), &values)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	}
 
-	return &req.RawConfigValues, nil
+	return nil
 }
