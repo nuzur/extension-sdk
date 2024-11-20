@@ -4,7 +4,7 @@ go 1.22.3
 
 require (
 	github.com/BurntSushi/toml v1.4.0
-	github.com/gofrs/uuid v4.4.0+incompatible	
+	github.com/gofrs/uuid v4.4.0+incompatible
 	go.uber.org/zap v1.26.0
 	golang.org/x/sync v0.8.0
 	google.golang.org/grpc v1.67.1

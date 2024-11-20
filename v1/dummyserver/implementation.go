@@ -51,6 +51,7 @@ func (s *Server) GetExtensionExecution(ctx context.Context, req *pb.GetExtension
 		Uuid:               req.ExecutionUuid,
 		ProjectUuid:        uuid.FromStringOrNil(DummyProjectUUID).String(),
 		ProjectVersionUuid: uuid.FromStringOrNil(DummyProjectVersionUUID).String(),
+		ExtensionUuid:      "0e4a4d9f-dd90-4173-b737-eeb75395a61a",
 	}, nil
 }
 func (s *Server) CreateExtensionExecution(ctx context.Context, req *pb.CreateExtensionExecutionRequest) (*gen.ExtensionExecution, error) {
