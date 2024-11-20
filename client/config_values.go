@@ -45,5 +45,10 @@ func (c *Client) ResolveConfigValues(ctx context.Context, req ResolveConfigValue
 		return nil
 	}
 
+	err := json.Unmarshal([]byte(req.RawConfigValues), &values)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
