@@ -82,6 +82,7 @@ func New(params Params) (*Client, error) {
 	productClient := pb.NewNuzurProductClient(conn)
 
 	// TODO possibly call api to get the extension details to validate
+	// might not be possible because we don't have auth token at this point
 
 	return &Client{
 		conn:          conn,
