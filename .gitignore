@@ -18,11 +18,11 @@
 # vendor/
 
 # Go workspace file
-v1/go.work
-v1/go.work.sum
+go.work
+go.work.sum
 
 # env file
 .env
 .vscode/*
-v1/gen/executions/*
+gen/executions/*
 .DS_Store
