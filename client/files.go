@@ -32,3 +32,10 @@ func (c *Client) UploadResults(ctx context.Context, req UploadResultsRequest) (*
 
 	return &res.Url, nil
 }
+
+type GetExecutionResultsRequest struct {
+}
+
+func (c *Client) GetExecutionResults(ctx context.Context, req GetExecutionResultsRequest) ([]byte, error) {
+	return nil, nil
+}
