@@ -87,11 +87,21 @@ message ExecutionResponseTypeStepData {
     repeated ExtensionInputField inputs_fields = 4;
 }
 
+enum DisplayBlockContentType {
+    DISPLAY_BLOCK_CONTENT_TYPE_INVALID = 0;
+    DISPLAY_BLOCK_CONTENT_TYPE_PLAIN_TEXT = 1;
+    DISPLAY_BLOCK_CONTENT_TYPE_JSON = 2;
+    DISPLAY_BLOCK_CONTENT_TYPE_SQL = 3;
+    DISPLAY_BLOCK_CONTENT_TYPE_PROTO = 4;
+    DISPLAY_BLOCK_CONTENT_TYPE_GOLANG = 5;
+}
+
 message ExecutionResponseDisplayBlock {
     string identifier = 1;
     string title = 2;
     string description = 3;
     string content = 4;
+    DisplayBlockContentType content_type = 5;
 }
 
 // end startexec
