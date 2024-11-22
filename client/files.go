@@ -33,7 +33,7 @@ func (c *Client) UploadExecutionResults(ctx context.Context, req UploadResultsRe
 		return nil, err
 	}
 
-	return &res.Url, nil
+	return &res.Filepath, nil
 }
 
 type DownloadExecutionResultsRequest struct {
@@ -66,13 +66,13 @@ func (c *Client) DownloadExecutionResults(ctx context.Context, req DownloadExecu
 	rootDir := filetools.CurrentPath()
 	filePath := path.Join(rootDir, "previous-executions", fmt.Sprintf("%s.%s", req.ExecutionUUID, req.FileExtension))
 
-	err = filetools.DownloadFile(filePath, res.Url)
+	err = filetools.DownloadFile(filePath, res.SignedUrl)
 	if err != nil {
 		return nil, err
 	}
 
 	return &DownloadExecutionResultsResponse{
-		FileDownloadUrl: res.Url,
+		FileDownloadUrl: res.Filepath,
 		LocalFilePath:   filePath,
 	}, nil
 }
