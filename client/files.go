@@ -38,14 +38,19 @@ func (c *Client) UploadExecutionResults(ctx context.Context, req UploadResultsRe
 	return &res.Url, nil
 }
 
-type GetExecutionResultsRequest struct {
+type DownloadExecutionResultsRequest struct {
 	ExecutionUUID      uuid.UUID
 	ProjectUUID        uuid.UUID
 	ProjectVersionUUID uuid.UUID
 	FileExtension      string
 }
 
-func (c *Client) DownloadExecutionResults(ctx context.Context, req GetExecutionResultsRequest) (*string, error) {
+type DownloadExecutionResultsResponse struct {
+	FileDownloadUrl string
+	LocalFilePath   string
+}
+
+func (c *Client) DownloadExecutionResults(ctx context.Context, req DownloadExecutionResultsRequest) (*DownloadExecutionResultsResponse, error) {
 	// get the signed url from product
 	res, err := c.productClient.GetExtensionExecutionFile(ctx, &gen.GetExtensionExecutionFileRequest{
 		ProjectUuid:          req.ProjectUUID.String(),
@@ -82,5 +87,8 @@ func (c *Client) DownloadExecutionResults(ctx context.Context, req GetExecutionR
 		return nil, err
 	}
 
-	return &filePath, nil
+	return &DownloadExecutionResultsResponse{
+		FileDownloadUrl: res.Url,
+		LocalFilePath:   filePath,
+	}, nil
 }
