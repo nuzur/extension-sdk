@@ -65,7 +65,8 @@ func (c *Client) DownloadExecutionResults(ctx context.Context, req DownloadExecu
 	}
 
 	// download into local file
-	filePath := path.Join("previous-executions", fmt.Sprintf("%s.%s", req.ExecutionUUID, req.FileExtension))
+	rootDir := CurrentPath()
+	filePath := path.Join(rootDir, "previous-executions", fmt.Sprintf("%s.%s", req.ExecutionUUID, req.FileExtension))
 
 	// create the file
 	out, err := os.Create(filePath)
