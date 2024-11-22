@@ -1,4 +1,4 @@
-package gen
+package filetools
 
 import (
 	"archive/zip"
@@ -10,8 +10,6 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-
-	"github.com/nuzur/extension-sdk/client"
 )
 
 type ZipRequest struct {
@@ -21,7 +19,7 @@ type ZipRequest struct {
 
 func GenerateZip(ctx context.Context, req ZipRequest) error {
 	// creating new zip file
-	rootDir := client.CurrentPath()
+	rootDir := CurrentPath()
 	zipFile := path.Join(rootDir, "executions", req.ExecutionUUID)
 	archive, err := os.Create(fmt.Sprintf("%s.zip", zipFile))
 	if err != nil {

@@ -2,13 +2,12 @@ package client
 
 import (
 	"crypto/x509"
-	"log"
-	"os"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nuzur/extension-sdk/config"
+	"github.com/nuzur/extension-sdk/filetools"
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
 	"go.uber.org/fx"
 	"golang.org/x/text/language"
@@ -34,7 +33,7 @@ type Params struct {
 
 func New(params Params) (*Client, error) {
 	// load config
-	configPath := filepath.Join(CurrentPath(), "config")
+	configPath := filepath.Join(filetools.CurrentPath(), "config")
 	if params.ConfigPath != nil {
 		configPath = *params.ConfigPath
 	}
@@ -53,7 +52,7 @@ func New(params Params) (*Client, error) {
 	// translations
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	translationPath := filepath.Join(CurrentPath(), "translations")
+	translationPath := filepath.Join(filetools.CurrentPath(), "translations")
 	bundle.LoadMessageFile(filepath.Join(translationPath, "en.toml"))
 	bundle.LoadMessageFile(filepath.Join(translationPath, "es.toml"))
 
@@ -90,12 +89,4 @@ func New(params Params) (*Client, error) {
 		metadata:      &metadata,
 		i18nbundle:    bundle,
 	}, nil
-}
-
-func CurrentPath() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return dir
 }

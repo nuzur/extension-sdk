@@ -3,12 +3,10 @@ package client
 import (
 	"context"
 	"fmt"
-	"io"
-	"net/http"
-	"os"
 	"path"
 
 	"github.com/gofrs/uuid"
+	"github.com/nuzur/extension-sdk/filetools"
 	"github.com/nuzur/extension-sdk/proto_deps/gen"
 )
 
@@ -65,25 +63,10 @@ func (c *Client) DownloadExecutionResults(ctx context.Context, req DownloadExecu
 	}
 
 	// download into local file
-	rootDir := CurrentPath()
+	rootDir := filetools.CurrentPath()
 	filePath := path.Join(rootDir, "previous-executions", fmt.Sprintf("%s.%s", req.ExecutionUUID, req.FileExtension))
 
-	// create the file
-	out, err := os.Create(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer out.Close()
-
-	// download
-	resp, err := http.Get(res.Url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	// write to file
-	_, err = io.Copy(out, resp.Body)
+	err = filetools.DownloadFile(filePath, res.Url)
 	if err != nil {
 		return nil, err
 	}

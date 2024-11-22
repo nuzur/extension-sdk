@@ -1,4 +1,4 @@
-package gen
+package filetools
 
 import (
 	"context"
@@ -7,7 +7,6 @@ import (
 	"path"
 	"testing"
 
-	"github.com/nuzur/extension-sdk/client"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,7 +24,7 @@ func TestGenerateFile(t *testing.T) {
 
 	assert.NotNil(t, output)
 	assert.NoError(t, err)
-	rootDir := client.CurrentPath()
+	rootDir := CurrentPath()
 	finalOutput := path.Join(rootDir, "executions", "123", "folder", "test.txt")
 	if _, err := os.Stat(finalOutput); errors.Is(err, os.ErrNotExist) {
 		assert.NoError(t, err)

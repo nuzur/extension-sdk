@@ -1,4 +1,4 @@
-package gen
+package filetools
 
 import (
 	"bytes"
@@ -9,8 +9,6 @@ import (
 	"path"
 	"path/filepath"
 	"text/template"
-
-	"github.com/nuzur/extension-sdk/client"
 )
 
 type FileRequest struct {
@@ -78,7 +76,7 @@ func GenerateFile(ctx context.Context, req FileRequest) ([]byte, error) {
 	}
 
 	// write the output
-	rootDir := client.CurrentPath()
+	rootDir := CurrentPath()
 	finalOutput := path.Join(rootDir, "executions", req.ExecutionUUID, req.OutputFile)
 	err = write(finalOutput, output)
 	if err != nil {
@@ -102,6 +100,6 @@ func write(filename string, b []byte) error {
 }
 
 func resolveTemplatesPath() string {
-	rootDir := client.CurrentPath()
+	rootDir := CurrentPath()
 	return path.Join(rootDir, "templates")
 }
