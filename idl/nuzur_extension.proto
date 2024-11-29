@@ -182,7 +182,7 @@ message ExtensionInputTypeConfig {
 }
 
 message ExtensionInputTypeUUIDConfig {    
-    ProjectEntityType project_entity_type = 1; 
+    EntityType entity_type = 1; 
 }
 
 message ExtensionInputTypeEnumConfig {
@@ -195,15 +195,17 @@ message ExtensionInputTypeArrayConfig {
     ExtensionInputTypeConfig array_type_config = 2;
 }
 
-enum ProjectEntityType { 
-    PROJECT_ENTITY_TYPE_INVALID = 0;
-    PROJECT_ENTITY_TYPE_ENTITY_ALL = 1;
-    PROJECT_ENTITY_TYPE_ENTITY_STANDALONE = 2;
-    PROJECT_ENTITY_TYPE_ENTITY_DEPENDANT = 3;
-    PROJECT_ENTITY_TYPE_RELATIONSHIP = 4;
-    PROJECT_ENTITY_TYPE_FIELD = 5;
-    PROJECT_ENTITY_TYPE_ENUM = 6;
-    PROJECT_ENTITY_TYPE_INDEX = 7;
+enum EntityType { 
+    ENTITY_TYPE_INVALID = 0;
+    ENTITY_TYPE_ENTITY_ALL = 1;
+    ENTITY_TYPE_ENTITY_STANDALONE = 2;
+    ENTITY_TYPE_ENTITY_DEPENDANT = 3;
+    ENTITY_TYPE_RELATIONSHIP = 4;
+    ENTITY_TYPE_FIELD = 5;
+    ENTITY_TYPE_ENUM = 6;
+    ENTITY_TYPE_INDEX = 7;
+    ENTITY_TYPE_DB_STORE = 8;
+    ENTITY_TYPE_DB_CONNECTION = 9;
 }
 
 message ExtensionInputEnumOption {
