@@ -1,10 +1,11 @@
 module github.com/nuzur/extension-sdk
 
-go 1.22.3
+go 1.23.3
 
 require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/gofrs/uuid v4.4.0+incompatible
+	github.com/nuzur/filetools v0.0.1
 	go.uber.org/zap v1.26.0
 	golang.org/x/sync v0.8.0
 	google.golang.org/grpc v1.67.1
@@ -24,7 +25,7 @@ require (
 
 require (
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	go.uber.org/config v1.4.0
 	go.uber.org/fx v1.23.0
 	golang.org/x/net v0.28.0 // indirect

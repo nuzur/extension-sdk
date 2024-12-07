@@ -6,8 +6,8 @@ import (
 	"path"
 
 	"github.com/gofrs/uuid"
-	"github.com/nuzur/extension-sdk/filetools"
 	"github.com/nuzur/extension-sdk/proto_deps/gen"
+	"github.com/nuzur/filetools"
 )
 
 type UploadResultsRequest struct {
