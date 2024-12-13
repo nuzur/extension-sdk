@@ -63,7 +63,7 @@ func (c *Client) DownloadExecutionResults(ctx context.Context, req DownloadExecu
 	}
 
 	// download into local file
-	rootDir := filetools.CurrentPath()
+	rootDir := filetools.CurrentLocalPath()
 	filePath := path.Join(rootDir, "previous-executions", fmt.Sprintf("%s.%s", req.ExecutionUUID, req.FileExtension))
 
 	err = filetools.DownloadFile(filePath, res.SignedUrl)

@@ -33,7 +33,7 @@ type Params struct {
 
 func New(params Params) (*Client, error) {
 	// load config
-	configPath := filepath.Join(filetools.CurrentPath(), "config")
+	configPath := filepath.Join(filetools.CurrentLocalPath(), "config")
 	if params.ConfigPath != nil {
 		configPath = *params.ConfigPath
 	}
@@ -52,7 +52,7 @@ func New(params Params) (*Client, error) {
 	// translations
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	translationPath := filepath.Join(filetools.CurrentPath(), "translations")
+	translationPath := filepath.Join(filetools.CurrentLocalPath(), "translations")
 	bundle.LoadMessageFile(filepath.Join(translationPath, "en.toml"))
 	bundle.LoadMessageFile(filepath.Join(translationPath, "es.toml"))
 
