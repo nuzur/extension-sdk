@@ -9,8 +9,8 @@ func BuildDummyClientServer() (*Client, *dummyserver.Server, error) {
 	}
 
 	client, err := New(Params{
-		API_ADDRESS: server.Address(),
-		DisableTLS:  true,
+		PRODUCT_API_ADDRESS: server.Address(),
+		DisableTLS:          true,
 	})
 
 	return client, server, err

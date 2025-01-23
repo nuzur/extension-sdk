@@ -26,9 +26,9 @@ type Client struct {
 type Params struct {
 	fx.In
 
-	ConfigPath  *string `optional:"true"`
-	API_ADDRESS *string `optional:"true"`
-	DisableTLS  bool    `optional:"true"`
+	ConfigPath          *string `optional:"true"`
+	PRODUCT_API_ADDRESS *string `optional:"true"`
+	DisableTLS          bool    `optional:"true"`
 }
 
 func New(params Params) (*Client, error) {
@@ -69,9 +69,9 @@ func New(params Params) (*Client, error) {
 		opts = append(opts, grpc.WithTransportCredentials(creds))
 	}
 
-	api_address := API_PROD_ADDRESS
-	if params.API_ADDRESS != nil {
-		api_address = *params.API_ADDRESS
+	api_address := PRODUCT_API_PROD_ADDRESS
+	if params.PRODUCT_API_ADDRESS != nil {
+		api_address = *params.PRODUCT_API_ADDRESS
 	}
 	conn, err := grpc.NewClient(api_address, opts...)
 	if err != nil {
