@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	NuzurProduct_GetUser_FullMethodName                                     = "/NuzurProduct/GetUser"
+	NuzurProduct_GetTokenUser_FullMethodName                                = "/NuzurProduct/GetTokenUser"
 	NuzurProduct_ListTeamsForUser_FullMethodName                            = "/NuzurProduct/ListTeamsForUser"
 	NuzurProduct_GetTeamForUser_FullMethodName                              = "/NuzurProduct/GetTeamForUser"
 	NuzurProduct_CreateTeam_FullMethodName                                  = "/NuzurProduct/CreateTeam"
@@ -47,6 +48,7 @@ const (
 	NuzurProduct_GetSignedFileURL_FullMethodName                            = "/NuzurProduct/GetSignedFileURL"
 	NuzurProduct_UploadExtensionExecutionFile_FullMethodName                = "/NuzurProduct/UploadExtensionExecutionFile"
 	NuzurProduct_GetExtensionExecutionFile_FullMethodName                   = "/NuzurProduct/GetExtensionExecutionFile"
+	NuzurProduct_UploadExtensionIcon_FullMethodName                         = "/NuzurProduct/UploadExtensionIcon"
 	NuzurProduct_ListExtensions_FullMethodName                              = "/NuzurProduct/ListExtensions"
 	NuzurProduct_GetExtension_FullMethodName                                = "/NuzurProduct/GetExtension"
 	NuzurProduct_CreateExtension_FullMethodName                             = "/NuzurProduct/CreateExtension"
@@ -67,6 +69,7 @@ const (
 type NuzurProductClient interface {
 	// user
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*gen.User, error)
+	GetTokenUser(ctx context.Context, in *GetTokenUserRequest, opts ...grpc.CallOption) (*gen.User, error)
 	// team
 	ListTeamsForUser(ctx context.Context, in *ListTeamsForUserRequest, opts ...grpc.CallOption) (*ListTeamsForUserResponse, error)
 	GetTeamForUser(ctx context.Context, in *GetTeamForUserRequest, opts ...grpc.CallOption) (*gen.Team, error)
@@ -98,6 +101,7 @@ type NuzurProductClient interface {
 	GetSignedFileURL(ctx context.Context, in *GetSignedFileURLRequest, opts ...grpc.CallOption) (*GetSignedFileURLResponse, error)
 	UploadExtensionExecutionFile(ctx context.Context, in *UploadExtensionExecutionFileRequest, opts ...grpc.CallOption) (*UploadExtensionExecutionFileResponse, error)
 	GetExtensionExecutionFile(ctx context.Context, in *GetExtensionExecutionFileRequest, opts ...grpc.CallOption) (*GetExtensionExecutionFileResponse, error)
+	UploadExtensionIcon(ctx context.Context, in *UploadExtensionIconRequest, opts ...grpc.CallOption) (*UploadExtensionIconResponse, error)
 	// extensions
 	ListExtensions(ctx context.Context, in *ListExtensionsRequest, opts ...grpc.CallOption) (*ListExtensionsResponse, error)
 	GetExtension(ctx context.Context, in *GetExtensionRequest, opts ...grpc.CallOption) (*gen.Extension, error)
@@ -127,6 +131,16 @@ func (c *nuzurProductClient) GetUser(ctx context.Context, in *GetUserRequest, op
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(gen.User)
 	err := c.cc.Invoke(ctx, NuzurProduct_GetUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) GetTokenUser(ctx context.Context, in *GetTokenUserRequest, opts ...grpc.CallOption) (*gen.User, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.User)
+	err := c.cc.Invoke(ctx, NuzurProduct_GetTokenUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -393,6 +407,16 @@ func (c *nuzurProductClient) GetExtensionExecutionFile(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *nuzurProductClient) UploadExtensionIcon(ctx context.Context, in *UploadExtensionIconRequest, opts ...grpc.CallOption) (*UploadExtensionIconResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UploadExtensionIconResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_UploadExtensionIcon_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nuzurProductClient) ListExtensions(ctx context.Context, in *ListExtensionsRequest, opts ...grpc.CallOption) (*ListExtensionsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListExtensionsResponse)
@@ -519,6 +543,7 @@ func (c *nuzurProductClient) UpdateExtensionExecution(ctx context.Context, in *U
 type NuzurProductServer interface {
 	// user
 	GetUser(context.Context, *GetUserRequest) (*gen.User, error)
+	GetTokenUser(context.Context, *GetTokenUserRequest) (*gen.User, error)
 	// team
 	ListTeamsForUser(context.Context, *ListTeamsForUserRequest) (*ListTeamsForUserResponse, error)
 	GetTeamForUser(context.Context, *GetTeamForUserRequest) (*gen.Team, error)
@@ -550,6 +575,7 @@ type NuzurProductServer interface {
 	GetSignedFileURL(context.Context, *GetSignedFileURLRequest) (*GetSignedFileURLResponse, error)
 	UploadExtensionExecutionFile(context.Context, *UploadExtensionExecutionFileRequest) (*UploadExtensionExecutionFileResponse, error)
 	GetExtensionExecutionFile(context.Context, *GetExtensionExecutionFileRequest) (*GetExtensionExecutionFileResponse, error)
+	UploadExtensionIcon(context.Context, *UploadExtensionIconRequest) (*UploadExtensionIconResponse, error)
 	// extensions
 	ListExtensions(context.Context, *ListExtensionsRequest) (*ListExtensionsResponse, error)
 	GetExtension(context.Context, *GetExtensionRequest) (*gen.Extension, error)
@@ -577,6 +603,9 @@ type UnimplementedNuzurProductServer struct{}
 
 func (UnimplementedNuzurProductServer) GetUser(context.Context, *GetUserRequest) (*gen.User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedNuzurProductServer) GetTokenUser(context.Context, *GetTokenUserRequest) (*gen.User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenUser not implemented")
 }
 func (UnimplementedNuzurProductServer) ListTeamsForUser(context.Context, *ListTeamsForUserRequest) (*ListTeamsForUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTeamsForUser not implemented")
@@ -656,6 +685,9 @@ func (UnimplementedNuzurProductServer) UploadExtensionExecutionFile(context.Cont
 func (UnimplementedNuzurProductServer) GetExtensionExecutionFile(context.Context, *GetExtensionExecutionFileRequest) (*GetExtensionExecutionFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetExtensionExecutionFile not implemented")
 }
+func (UnimplementedNuzurProductServer) UploadExtensionIcon(context.Context, *UploadExtensionIconRequest) (*UploadExtensionIconResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadExtensionIcon not implemented")
+}
 func (UnimplementedNuzurProductServer) ListExtensions(context.Context, *ListExtensionsRequest) (*ListExtensionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListExtensions not implemented")
 }
@@ -727,6 +759,24 @@ func _NuzurProduct_GetUser_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NuzurProductServer).GetUser(ctx, req.(*GetUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_GetTokenUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTokenUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).GetTokenUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_GetTokenUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).GetTokenUser(ctx, req.(*GetTokenUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1199,6 +1249,24 @@ func _NuzurProduct_GetExtensionExecutionFile_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_UploadExtensionIcon_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadExtensionIconRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UploadExtensionIcon(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UploadExtensionIcon_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UploadExtensionIcon(ctx, req.(*UploadExtensionIconRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NuzurProduct_ListExtensions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListExtensionsRequest)
 	if err := dec(in); err != nil {
@@ -1427,6 +1495,10 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _NuzurProduct_GetUser_Handler,
 		},
 		{
+			MethodName: "GetTokenUser",
+			Handler:    _NuzurProduct_GetTokenUser_Handler,
+		},
+		{
 			MethodName: "ListTeamsForUser",
 			Handler:    _NuzurProduct_ListTeamsForUser_Handler,
 		},
@@ -1529,6 +1601,10 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetExtensionExecutionFile",
 			Handler:    _NuzurProduct_GetExtensionExecutionFile_Handler,
+		},
+		{
+			MethodName: "UploadExtensionIcon",
+			Handler:    _NuzurProduct_UploadExtensionIcon_Handler,
 		},
 		{
 			MethodName: "ListExtensions",

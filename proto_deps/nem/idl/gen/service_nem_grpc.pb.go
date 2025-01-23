@@ -49,6 +49,9 @@ const (
 	Nem_ListExtensionExecutions_FullMethodName  = "/nem.Nem/ListExtensionExecutions"
 	Nem_CreateExtensionExecution_FullMethodName = "/nem.Nem/CreateExtensionExecution"
 	Nem_UpdateExtensionExecution_FullMethodName = "/nem.Nem/UpdateExtensionExecution"
+	Nem_ListUserConnections_FullMethodName      = "/nem.Nem/ListUserConnections"
+	Nem_CreateUserConnection_FullMethodName     = "/nem.Nem/CreateUserConnection"
+	Nem_UpdateUserConnection_FullMethodName     = "/nem.Nem/UpdateUserConnection"
 )
 
 // NemClient is the client API for Nem service.
@@ -95,6 +98,10 @@ type NemClient interface {
 	ListExtensionExecutions(ctx context.Context, in *ListExtensionExecutionsRequest, opts ...grpc.CallOption) (*ListExtensionExecutionsResponse, error)
 	CreateExtensionExecution(ctx context.Context, in *CreateExtensionExecutionRequest, opts ...grpc.CallOption) (*ExtensionExecution, error)
 	UpdateExtensionExecution(ctx context.Context, in *UpdateExtensionExecutionRequest, opts ...grpc.CallOption) (*ExtensionExecution, error)
+	// user_connection start
+	ListUserConnections(ctx context.Context, in *ListUserConnectionsRequest, opts ...grpc.CallOption) (*ListUserConnectionsResponse, error)
+	CreateUserConnection(ctx context.Context, in *CreateUserConnectionRequest, opts ...grpc.CallOption) (*UserConnection, error)
+	UpdateUserConnection(ctx context.Context, in *UpdateUserConnectionRequest, opts ...grpc.CallOption) (*UserConnection, error)
 }
 
 type nemClient struct {
@@ -405,6 +412,36 @@ func (c *nemClient) UpdateExtensionExecution(ctx context.Context, in *UpdateExte
 	return out, nil
 }
 
+func (c *nemClient) ListUserConnections(ctx context.Context, in *ListUserConnectionsRequest, opts ...grpc.CallOption) (*ListUserConnectionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserConnectionsResponse)
+	err := c.cc.Invoke(ctx, Nem_ListUserConnections_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nemClient) CreateUserConnection(ctx context.Context, in *CreateUserConnectionRequest, opts ...grpc.CallOption) (*UserConnection, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserConnection)
+	err := c.cc.Invoke(ctx, Nem_CreateUserConnection_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nemClient) UpdateUserConnection(ctx context.Context, in *UpdateUserConnectionRequest, opts ...grpc.CallOption) (*UserConnection, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserConnection)
+	err := c.cc.Invoke(ctx, Nem_UpdateUserConnection_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NemServer is the server API for Nem service.
 // All implementations must embed UnimplementedNemServer
 // for forward compatibility.
@@ -449,6 +486,10 @@ type NemServer interface {
 	ListExtensionExecutions(context.Context, *ListExtensionExecutionsRequest) (*ListExtensionExecutionsResponse, error)
 	CreateExtensionExecution(context.Context, *CreateExtensionExecutionRequest) (*ExtensionExecution, error)
 	UpdateExtensionExecution(context.Context, *UpdateExtensionExecutionRequest) (*ExtensionExecution, error)
+	// user_connection start
+	ListUserConnections(context.Context, *ListUserConnectionsRequest) (*ListUserConnectionsResponse, error)
+	CreateUserConnection(context.Context, *CreateUserConnectionRequest) (*UserConnection, error)
+	UpdateUserConnection(context.Context, *UpdateUserConnectionRequest) (*UserConnection, error)
 	mustEmbedUnimplementedNemServer()
 }
 
@@ -548,6 +589,15 @@ func (UnimplementedNemServer) CreateExtensionExecution(context.Context, *CreateE
 }
 func (UnimplementedNemServer) UpdateExtensionExecution(context.Context, *UpdateExtensionExecutionRequest) (*ExtensionExecution, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateExtensionExecution not implemented")
+}
+func (UnimplementedNemServer) ListUserConnections(context.Context, *ListUserConnectionsRequest) (*ListUserConnectionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUserConnections not implemented")
+}
+func (UnimplementedNemServer) CreateUserConnection(context.Context, *CreateUserConnectionRequest) (*UserConnection, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUserConnection not implemented")
+}
+func (UnimplementedNemServer) UpdateUserConnection(context.Context, *UpdateUserConnectionRequest) (*UserConnection, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserConnection not implemented")
 }
 func (UnimplementedNemServer) mustEmbedUnimplementedNemServer() {}
 func (UnimplementedNemServer) testEmbeddedByValue()             {}
@@ -1110,6 +1160,60 @@ func _Nem_UpdateExtensionExecution_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Nem_ListUserConnections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserConnectionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NemServer).ListUserConnections(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Nem_ListUserConnections_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NemServer).ListUserConnections(ctx, req.(*ListUserConnectionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Nem_CreateUserConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserConnectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NemServer).CreateUserConnection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Nem_CreateUserConnection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NemServer).CreateUserConnection(ctx, req.(*CreateUserConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Nem_UpdateUserConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserConnectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NemServer).UpdateUserConnection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Nem_UpdateUserConnection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NemServer).UpdateUserConnection(ctx, req.(*UpdateUserConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Nem_ServiceDesc is the grpc.ServiceDesc for Nem service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1236,6 +1340,18 @@ var Nem_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateExtensionExecution",
 			Handler:    _Nem_UpdateExtensionExecution_Handler,
+		},
+		{
+			MethodName: "ListUserConnections",
+			Handler:    _Nem_ListUserConnections_Handler,
+		},
+		{
+			MethodName: "CreateUserConnection",
+			Handler:    _Nem_CreateUserConnection_Handler,
+		},
+		{
+			MethodName: "UpdateUserConnection",
+			Handler:    _Nem_UpdateUserConnection_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
