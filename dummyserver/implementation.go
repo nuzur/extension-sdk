@@ -5,7 +5,7 @@ import (
 
 	"github.com/gofrs/uuid"
 	pb "github.com/nuzur/extension-sdk/proto_deps/gen"
-	"github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	"github.com/nuzur/nem/idl/gen"
 )
 
 const DummyProjectUUID = "51ffef0c-0b21-4bed-bd3e-c17c2314a19b"

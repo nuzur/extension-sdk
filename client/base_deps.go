@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/gofrs/uuid"
-	nemgen "github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	nemgen "github.com/nuzur/nem/idl/gen"
 	"golang.org/x/sync/errgroup"
 )
 

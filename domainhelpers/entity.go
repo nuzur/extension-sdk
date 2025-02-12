@@ -1,7 +1,7 @@
 package domainhelpers
 
 import (
-	nemgen "github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	nemgen "github.com/nuzur/nem/idl/gen"
 )
 
 func EntityPrimaryKeys(entity *nemgen.Entity) []*nemgen.Field {

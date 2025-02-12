@@ -2,7 +2,7 @@ package mapper
 
 import (
 	pb "github.com/nuzur/extension-sdk/idl/gen"
-	nemgen "github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	nemgen "github.com/nuzur/nem/idl/gen"
 )
 
 func MapExecutionToGetResponse(

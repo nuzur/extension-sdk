@@ -7,7 +7,7 @@ import (
 	"github.com/gofrs/uuid"
 	pb "github.com/nuzur/extension-sdk/idl/gen"
 	"github.com/nuzur/extension-sdk/proto_deps/gen"
-	nemgen "github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	nemgen "github.com/nuzur/nem/idl/gen"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

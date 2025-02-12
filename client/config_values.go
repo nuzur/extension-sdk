@@ -6,7 +6,7 @@ import (
 	"errors"
 
 	"github.com/gofrs/uuid"
-	"github.com/nuzur/extension-sdk/proto_deps/nem/idl/gen"
+	"github.com/nuzur/nem/idl/gen"
 )
 
 type ResolveConfigValuesRequest struct {
