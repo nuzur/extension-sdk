@@ -10,3 +10,8 @@ protoc --go_out=. --go-grpc_out=. --proto_path=./../../nuzur-go/product/idl/prot
 
 sed -i '' 's/nem\/idl\/gen/github.com\/nuzur\/nem\/idl\/gen/g' ./gen/product.pb.go
 sed -i '' 's/nem\/idl\/gen/github.com\/nuzur\/nem\/idl\/gen/g' ./gen/product_grpc.pb.go
+
+protoc --go_out=. --go-grpc_out=. --proto_path=./../../nuzur-go/connection-manager/idl/proto --proto_path=./../../nem/idl/proto ./../../nuzur-go/connection-manager/idl/proto/*.proto
+
+sed -i '' 's/nem\/idl\/gen/github.com\/nuzur\/nem\/idl\/gen/g' ./gen/connection_manager.pb.go
+sed -i '' 's/nem\/idl\/gen/github.com\/nuzur\/nem\/idl\/gen/g' ./gen/connection_manager_grpc.pb.go
