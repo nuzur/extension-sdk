@@ -71,6 +71,7 @@ message StartExecutionResponse {
 message ExecutionResponseTypeData {
     ExecutionResponseTypeFinalData final = 1;
     ExecutionResponseTypeStepData step = 2;
+    ExecutionResponseTypeAsyncData async = 3;
 }
 
 message ExecutionResponseTypeFinalData {
@@ -78,6 +79,10 @@ message ExecutionResponseTypeFinalData {
     string status_message = 2;
     string file_download_url = 3;
     repeated ExecutionResponseDisplayBlock display_blocks = 4;
+}
+
+message ExecutionResponseTypeAsyncData {
+    string status_message = 1;
 }
 
 message ExecutionResponseTypeStepData {
