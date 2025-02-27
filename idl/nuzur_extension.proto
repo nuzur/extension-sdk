@@ -116,7 +116,7 @@ message ExecutionResponseDisplayBlock {
 message SubmitExectuionStepRequest {
     string execution_uuid = 1;
     string step_identifier = 2;
-    bool confrimed = 3;
+    bool confirmed = 3;
     repeated ExecutionStepDataInputValue input_values = 4;
     string locale = 5;
 }
