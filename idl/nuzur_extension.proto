@@ -7,9 +7,9 @@ option java_outer_classname = "NuzurExtension";
 
 service NuzurExtension {
     rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
-    rpc StartExecution(StartExecutionRequest) returns (StartExecutionResponse) {}
-    rpc SubmitExectuionStep(SubmitExectuionStepRequest) returns (SubmitExectuionStepResponse) {}
+    rpc StartExecution(StartExecutionRequest) returns (StartExecutionResponse) {}    
     rpc GetExecution(GetExecutionRequest) returns (GetExecutionResponse) {}
+    rpc SubmitExectuionStep(SubmitExectuionStepRequest) returns (SubmitExectuionStepResponse) {}
 }
 
 
@@ -114,10 +114,11 @@ message ExecutionResponseDisplayBlock {
 
 // start submit step 
 message SubmitExectuionStepRequest {
-    string step_identifier = 1;
-    bool confrimed = 2;
-    repeated ExecutionStepDataInputValue input_values = 3;
-    string locale = 4;
+    string execution_uuid = 1;
+    string step_identifier = 2;
+    bool confrimed = 3;
+    repeated ExecutionStepDataInputValue input_values = 4;
+    string locale = 5;
 }
 
 message ExecutionStepDataInputValue {

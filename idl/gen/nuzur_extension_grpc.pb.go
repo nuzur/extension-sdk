@@ -21,8 +21,8 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	NuzurExtension_GetMetadata_FullMethodName         = "/NuzurExtension/GetMetadata"
 	NuzurExtension_StartExecution_FullMethodName      = "/NuzurExtension/StartExecution"
-	NuzurExtension_SubmitExectuionStep_FullMethodName = "/NuzurExtension/SubmitExectuionStep"
 	NuzurExtension_GetExecution_FullMethodName        = "/NuzurExtension/GetExecution"
+	NuzurExtension_SubmitExectuionStep_FullMethodName = "/NuzurExtension/SubmitExectuionStep"
 )
 
 // NuzurExtensionClient is the client API for NuzurExtension service.
@@ -31,8 +31,8 @@ const (
 type NuzurExtensionClient interface {
 	GetMetadata(ctx context.Context, in *GetMetadataRequest, opts ...grpc.CallOption) (*GetMetadataResponse, error)
 	StartExecution(ctx context.Context, in *StartExecutionRequest, opts ...grpc.CallOption) (*StartExecutionResponse, error)
-	SubmitExectuionStep(ctx context.Context, in *SubmitExectuionStepRequest, opts ...grpc.CallOption) (*SubmitExectuionStepResponse, error)
 	GetExecution(ctx context.Context, in *GetExecutionRequest, opts ...grpc.CallOption) (*GetExecutionResponse, error)
+	SubmitExectuionStep(ctx context.Context, in *SubmitExectuionStepRequest, opts ...grpc.CallOption) (*SubmitExectuionStepResponse, error)
 }
 
 type nuzurExtensionClient struct {
@@ -63,20 +63,20 @@ func (c *nuzurExtensionClient) StartExecution(ctx context.Context, in *StartExec
 	return out, nil
 }
 
-func (c *nuzurExtensionClient) SubmitExectuionStep(ctx context.Context, in *SubmitExectuionStepRequest, opts ...grpc.CallOption) (*SubmitExectuionStepResponse, error) {
+func (c *nuzurExtensionClient) GetExecution(ctx context.Context, in *GetExecutionRequest, opts ...grpc.CallOption) (*GetExecutionResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SubmitExectuionStepResponse)
-	err := c.cc.Invoke(ctx, NuzurExtension_SubmitExectuionStep_FullMethodName, in, out, cOpts...)
+	out := new(GetExecutionResponse)
+	err := c.cc.Invoke(ctx, NuzurExtension_GetExecution_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *nuzurExtensionClient) GetExecution(ctx context.Context, in *GetExecutionRequest, opts ...grpc.CallOption) (*GetExecutionResponse, error) {
+func (c *nuzurExtensionClient) SubmitExectuionStep(ctx context.Context, in *SubmitExectuionStepRequest, opts ...grpc.CallOption) (*SubmitExectuionStepResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetExecutionResponse)
-	err := c.cc.Invoke(ctx, NuzurExtension_GetExecution_FullMethodName, in, out, cOpts...)
+	out := new(SubmitExectuionStepResponse)
+	err := c.cc.Invoke(ctx, NuzurExtension_SubmitExectuionStep_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,8 +89,8 @@ func (c *nuzurExtensionClient) GetExecution(ctx context.Context, in *GetExecutio
 type NuzurExtensionServer interface {
 	GetMetadata(context.Context, *GetMetadataRequest) (*GetMetadataResponse, error)
 	StartExecution(context.Context, *StartExecutionRequest) (*StartExecutionResponse, error)
-	SubmitExectuionStep(context.Context, *SubmitExectuionStepRequest) (*SubmitExectuionStepResponse, error)
 	GetExecution(context.Context, *GetExecutionRequest) (*GetExecutionResponse, error)
+	SubmitExectuionStep(context.Context, *SubmitExectuionStepRequest) (*SubmitExectuionStepResponse, error)
 	mustEmbedUnimplementedNuzurExtensionServer()
 }
 
@@ -107,11 +107,11 @@ func (UnimplementedNuzurExtensionServer) GetMetadata(context.Context, *GetMetada
 func (UnimplementedNuzurExtensionServer) StartExecution(context.Context, *StartExecutionRequest) (*StartExecutionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartExecution not implemented")
 }
-func (UnimplementedNuzurExtensionServer) SubmitExectuionStep(context.Context, *SubmitExectuionStepRequest) (*SubmitExectuionStepResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitExectuionStep not implemented")
-}
 func (UnimplementedNuzurExtensionServer) GetExecution(context.Context, *GetExecutionRequest) (*GetExecutionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetExecution not implemented")
+}
+func (UnimplementedNuzurExtensionServer) SubmitExectuionStep(context.Context, *SubmitExectuionStepRequest) (*SubmitExectuionStepResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitExectuionStep not implemented")
 }
 func (UnimplementedNuzurExtensionServer) mustEmbedUnimplementedNuzurExtensionServer() {}
 func (UnimplementedNuzurExtensionServer) testEmbeddedByValue()                        {}
@@ -170,24 +170,6 @@ func _NuzurExtension_StartExecution_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _NuzurExtension_SubmitExectuionStep_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SubmitExectuionStepRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NuzurExtensionServer).SubmitExectuionStep(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: NuzurExtension_SubmitExectuionStep_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NuzurExtensionServer).SubmitExectuionStep(ctx, req.(*SubmitExectuionStepRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _NuzurExtension_GetExecution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetExecutionRequest)
 	if err := dec(in); err != nil {
@@ -202,6 +184,24 @@ func _NuzurExtension_GetExecution_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NuzurExtensionServer).GetExecution(ctx, req.(*GetExecutionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurExtension_SubmitExectuionStep_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitExectuionStepRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurExtensionServer).SubmitExectuionStep(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurExtension_SubmitExectuionStep_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurExtensionServer).SubmitExectuionStep(ctx, req.(*SubmitExectuionStepRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -222,12 +222,12 @@ var NuzurExtension_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _NuzurExtension_StartExecution_Handler,
 		},
 		{
-			MethodName: "SubmitExectuionStep",
-			Handler:    _NuzurExtension_SubmitExectuionStep_Handler,
-		},
-		{
 			MethodName: "GetExecution",
 			Handler:    _NuzurExtension_GetExecution_Handler,
+		},
+		{
+			MethodName: "SubmitExectuionStep",
+			Handler:    _NuzurExtension_SubmitExectuionStep_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
