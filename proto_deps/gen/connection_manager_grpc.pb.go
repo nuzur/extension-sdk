@@ -19,15 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NuzurConnectionManager_GetUserConnections_FullMethodName   = "/NuzurConnectionManager/GetUserConnections"
-	NuzurConnectionManager_ClearUserConnections_FullMethodName = "/NuzurConnectionManager/ClearUserConnections"
-	NuzurConnectionManager_TestConnection_FullMethodName       = "/NuzurConnectionManager/TestConnection"
-	NuzurConnectionManager_ExecuteQuery_FullMethodName         = "/NuzurConnectionManager/ExecuteQuery"
-	NuzurConnectionManager_GetQueryExecution_FullMethodName    = "/NuzurConnectionManager/GetQueryExecution"
-	NuzurConnectionManager_CancelQueryExecution_FullMethodName = "/NuzurConnectionManager/CancelQueryExecution"
-	NuzurConnectionManager_StartChangesDiff_FullMethodName     = "/NuzurConnectionManager/StartChangesDiff"
-	NuzurConnectionManager_GetChangesDiff_FullMethodName       = "/NuzurConnectionManager/GetChangesDiff"
-	NuzurConnectionManager_CancelChangesDiff_FullMethodName    = "/NuzurConnectionManager/CancelChangesDiff"
+	NuzurConnectionManager_GetUserConnections_FullMethodName              = "/NuzurConnectionManager/GetUserConnections"
+	NuzurConnectionManager_ClearUserConnections_FullMethodName            = "/NuzurConnectionManager/ClearUserConnections"
+	NuzurConnectionManager_TestConnection_FullMethodName                  = "/NuzurConnectionManager/TestConnection"
+	NuzurConnectionManager_GetSchemas_FullMethodName                      = "/NuzurConnectionManager/GetSchemas"
+	NuzurConnectionManager_ExecuteQuery_FullMethodName                    = "/NuzurConnectionManager/ExecuteQuery"
+	NuzurConnectionManager_GetQueryExecution_FullMethodName               = "/NuzurConnectionManager/GetQueryExecution"
+	NuzurConnectionManager_CancelQueryExecution_FullMethodName            = "/NuzurConnectionManager/CancelQueryExecution"
+	NuzurConnectionManager_StartChangesDiff_FullMethodName                = "/NuzurConnectionManager/StartChangesDiff"
+	NuzurConnectionManager_GetChangesDiff_FullMethodName                  = "/NuzurConnectionManager/GetChangesDiff"
+	NuzurConnectionManager_CancelChangesDiff_FullMethodName               = "/NuzurConnectionManager/CancelChangesDiff"
+	NuzurConnectionManager_GetProjectVersionFromConnection_FullMethodName = "/NuzurConnectionManager/GetProjectVersionFromConnection"
 )
 
 // NuzurConnectionManagerClient is the client API for NuzurConnectionManager service.
@@ -38,6 +40,7 @@ type NuzurConnectionManagerClient interface {
 	GetUserConnections(ctx context.Context, in *GetUserConnectionsRequest, opts ...grpc.CallOption) (*GetUserConnectionsResponse, error)
 	ClearUserConnections(ctx context.Context, in *ClearUserConnectionsRequest, opts ...grpc.CallOption) (*ClearUserConnectionsResponse, error)
 	TestConnection(ctx context.Context, in *TestConnectionRequest, opts ...grpc.CallOption) (*TestConnectionResponse, error)
+	GetSchemas(ctx context.Context, in *GetSchemasRequest, opts ...grpc.CallOption) (*GetSchemasResponse, error)
 	// query executions
 	ExecuteQuery(ctx context.Context, in *ExecuteQueryRequest, opts ...grpc.CallOption) (*ExecuteQueryResponse, error)
 	GetQueryExecution(ctx context.Context, in *GetQueryExecutionRequest, opts ...grpc.CallOption) (*GetQueryExecutionResponse, error)
@@ -46,6 +49,8 @@ type NuzurConnectionManagerClient interface {
 	StartChangesDiff(ctx context.Context, in *StartChangesDiffRequest, opts ...grpc.CallOption) (*StartChangesDiffResponse, error)
 	GetChangesDiff(ctx context.Context, in *GetChangesDiffRequest, opts ...grpc.CallOption) (*GetChangesDiffResponse, error)
 	CancelChangesDiff(ctx context.Context, in *CancelChangesDiffRequest, opts ...grpc.CallOption) (*CancelChangesDiffResponse, error)
+	// project version
+	GetProjectVersionFromConnection(ctx context.Context, in *GetProjectVersionFromConnectionRequest, opts ...grpc.CallOption) (*GetProjectVersionFromConnectionResponse, error)
 }
 
 type nuzurConnectionManagerClient struct {
@@ -80,6 +85,16 @@ func (c *nuzurConnectionManagerClient) TestConnection(ctx context.Context, in *T
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TestConnectionResponse)
 	err := c.cc.Invoke(ctx, NuzurConnectionManager_TestConnection_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurConnectionManagerClient) GetSchemas(ctx context.Context, in *GetSchemasRequest, opts ...grpc.CallOption) (*GetSchemasResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSchemasResponse)
+	err := c.cc.Invoke(ctx, NuzurConnectionManager_GetSchemas_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -146,6 +161,16 @@ func (c *nuzurConnectionManagerClient) CancelChangesDiff(ctx context.Context, in
 	return out, nil
 }
 
+func (c *nuzurConnectionManagerClient) GetProjectVersionFromConnection(ctx context.Context, in *GetProjectVersionFromConnectionRequest, opts ...grpc.CallOption) (*GetProjectVersionFromConnectionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetProjectVersionFromConnectionResponse)
+	err := c.cc.Invoke(ctx, NuzurConnectionManager_GetProjectVersionFromConnection_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NuzurConnectionManagerServer is the server API for NuzurConnectionManager service.
 // All implementations must embed UnimplementedNuzurConnectionManagerServer
 // for forward compatibility.
@@ -154,6 +179,7 @@ type NuzurConnectionManagerServer interface {
 	GetUserConnections(context.Context, *GetUserConnectionsRequest) (*GetUserConnectionsResponse, error)
 	ClearUserConnections(context.Context, *ClearUserConnectionsRequest) (*ClearUserConnectionsResponse, error)
 	TestConnection(context.Context, *TestConnectionRequest) (*TestConnectionResponse, error)
+	GetSchemas(context.Context, *GetSchemasRequest) (*GetSchemasResponse, error)
 	// query executions
 	ExecuteQuery(context.Context, *ExecuteQueryRequest) (*ExecuteQueryResponse, error)
 	GetQueryExecution(context.Context, *GetQueryExecutionRequest) (*GetQueryExecutionResponse, error)
@@ -162,6 +188,8 @@ type NuzurConnectionManagerServer interface {
 	StartChangesDiff(context.Context, *StartChangesDiffRequest) (*StartChangesDiffResponse, error)
 	GetChangesDiff(context.Context, *GetChangesDiffRequest) (*GetChangesDiffResponse, error)
 	CancelChangesDiff(context.Context, *CancelChangesDiffRequest) (*CancelChangesDiffResponse, error)
+	// project version
+	GetProjectVersionFromConnection(context.Context, *GetProjectVersionFromConnectionRequest) (*GetProjectVersionFromConnectionResponse, error)
 	mustEmbedUnimplementedNuzurConnectionManagerServer()
 }
 
@@ -181,6 +209,9 @@ func (UnimplementedNuzurConnectionManagerServer) ClearUserConnections(context.Co
 func (UnimplementedNuzurConnectionManagerServer) TestConnection(context.Context, *TestConnectionRequest) (*TestConnectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TestConnection not implemented")
 }
+func (UnimplementedNuzurConnectionManagerServer) GetSchemas(context.Context, *GetSchemasRequest) (*GetSchemasResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSchemas not implemented")
+}
 func (UnimplementedNuzurConnectionManagerServer) ExecuteQuery(context.Context, *ExecuteQueryRequest) (*ExecuteQueryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExecuteQuery not implemented")
 }
@@ -198,6 +229,9 @@ func (UnimplementedNuzurConnectionManagerServer) GetChangesDiff(context.Context,
 }
 func (UnimplementedNuzurConnectionManagerServer) CancelChangesDiff(context.Context, *CancelChangesDiffRequest) (*CancelChangesDiffResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelChangesDiff not implemented")
+}
+func (UnimplementedNuzurConnectionManagerServer) GetProjectVersionFromConnection(context.Context, *GetProjectVersionFromConnectionRequest) (*GetProjectVersionFromConnectionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectVersionFromConnection not implemented")
 }
 func (UnimplementedNuzurConnectionManagerServer) mustEmbedUnimplementedNuzurConnectionManagerServer() {
 }
@@ -271,6 +305,24 @@ func _NuzurConnectionManager_TestConnection_Handler(srv interface{}, ctx context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NuzurConnectionManagerServer).TestConnection(ctx, req.(*TestConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurConnectionManager_GetSchemas_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSchemasRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurConnectionManagerServer).GetSchemas(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurConnectionManager_GetSchemas_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurConnectionManagerServer).GetSchemas(ctx, req.(*GetSchemasRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -383,6 +435,24 @@ func _NuzurConnectionManager_CancelChangesDiff_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurConnectionManager_GetProjectVersionFromConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectVersionFromConnectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurConnectionManagerServer).GetProjectVersionFromConnection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurConnectionManager_GetProjectVersionFromConnection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurConnectionManagerServer).GetProjectVersionFromConnection(ctx, req.(*GetProjectVersionFromConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NuzurConnectionManager_ServiceDesc is the grpc.ServiceDesc for NuzurConnectionManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -401,6 +471,10 @@ var NuzurConnectionManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TestConnection",
 			Handler:    _NuzurConnectionManager_TestConnection_Handler,
+		},
+		{
+			MethodName: "GetSchemas",
+			Handler:    _NuzurConnectionManager_GetSchemas_Handler,
 		},
 		{
 			MethodName: "ExecuteQuery",
@@ -425,6 +499,10 @@ var NuzurConnectionManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelChangesDiff",
 			Handler:    _NuzurConnectionManager_CancelChangesDiff_Handler,
+		},
+		{
+			MethodName: "GetProjectVersionFromConnection",
+			Handler:    _NuzurConnectionManager_GetProjectVersionFromConnection_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
