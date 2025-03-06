@@ -19,3 +19,9 @@ func (c *Client) GetProjectVersion(ctx context.Context, projectVersionUUID uuid.
 		ProjectVersionUuid: projectVersionUUID.String(),
 	})
 }
+
+func (c *Client) UpdateProjectVersion(ctx context.Context, projectVersion *nemgen.ProjectVersion) (*nemgen.ProjectVersion, error) {
+	return c.productClient.UpdateProjectVersion(ctx, &gen.UpdateProjectVersionRequest{
+		ProjectVersion: projectVersion,
+	})
+}
