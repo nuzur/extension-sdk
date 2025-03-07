@@ -79,6 +79,7 @@ message ExecutionResponseTypeFinalData {
     string status_message = 2;
     string file_download_url = 3;
     repeated ExecutionResponseDisplayBlock display_blocks = 4;
+    bool requires_project_version_update = 5;
 }
 
 message ExecutionResponseTypeAsyncData {
