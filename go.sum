@@ -29,8 +29,8 @@ github.com/nicksnyder/go-i18n/v2 v2.4.1 h1:zwzjtX4uYyiaU02K5Ia3zSkpJZrByARkRB4V3
 github.com/nicksnyder/go-i18n/v2 v2.4.1/go.mod h1:++Pl70FR6Cki7hdzZRnEEqdc2dJt+SAGotyFg/SvZMk=
 github.com/nuzur/filetools v0.0.3 h1:Ns2g9/f9SqZUujZa0hkt4rbLfDpQJLcA30d7rKCZ8PE=
 github.com/nuzur/filetools v0.0.3/go.mod h1:jRAy/C7ilpw0HBDFYhXGv5+IS3WIen468z8XsFEVAdw=
-github.com/nuzur/nem v1.0.17 h1:/WtpU09NWL7t5VPoveNTv+CIzAEtQUg19RMsjURQFM8=
-github.com/nuzur/nem v1.0.17/go.mod h1:YKDY0rVlUicBHl4nZXrbyOiXp8Y3WZUR3VyMbc3YtHI=
+github.com/nuzur/nem v1.0.18 h1:Ae6jJv/JEXSlctPmx5kN5C9LSlBuUGSzgfnECXWgYEE=
+github.com/nuzur/nem v1.0.18/go.mod h1:YKDY0rVlUicBHl4nZXrbyOiXp8Y3WZUR3VyMbc3YtHI=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
