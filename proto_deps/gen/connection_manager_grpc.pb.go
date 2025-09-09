@@ -26,6 +26,7 @@ const (
 	NuzurConnectionManager_ExecuteQuery_FullMethodName                    = "/NuzurConnectionManager/ExecuteQuery"
 	NuzurConnectionManager_GetQueryExecution_FullMethodName               = "/NuzurConnectionManager/GetQueryExecution"
 	NuzurConnectionManager_CancelQueryExecution_FullMethodName            = "/NuzurConnectionManager/CancelQueryExecution"
+	NuzurConnectionManager_ApplyDataCR_FullMethodName                     = "/NuzurConnectionManager/ApplyDataCR"
 	NuzurConnectionManager_StartChangesDiff_FullMethodName                = "/NuzurConnectionManager/StartChangesDiff"
 	NuzurConnectionManager_GetChangesDiff_FullMethodName                  = "/NuzurConnectionManager/GetChangesDiff"
 	NuzurConnectionManager_CancelChangesDiff_FullMethodName               = "/NuzurConnectionManager/CancelChangesDiff"
@@ -45,6 +46,7 @@ type NuzurConnectionManagerClient interface {
 	ExecuteQuery(ctx context.Context, in *ExecuteQueryRequest, opts ...grpc.CallOption) (*ExecuteQueryResponse, error)
 	GetQueryExecution(ctx context.Context, in *GetQueryExecutionRequest, opts ...grpc.CallOption) (*GetQueryExecutionResponse, error)
 	CancelQueryExecution(ctx context.Context, in *CancelQueryExecutionRequest, opts ...grpc.CallOption) (*CancelQueryExecutionResponse, error)
+	ApplyDataCR(ctx context.Context, in *ApplyDataCRRequest, opts ...grpc.CallOption) (*ApplyDataCRResponse, error)
 	// diff changes
 	StartChangesDiff(ctx context.Context, in *StartChangesDiffRequest, opts ...grpc.CallOption) (*StartChangesDiffResponse, error)
 	GetChangesDiff(ctx context.Context, in *GetChangesDiffRequest, opts ...grpc.CallOption) (*GetChangesDiffResponse, error)
@@ -131,6 +133,16 @@ func (c *nuzurConnectionManagerClient) CancelQueryExecution(ctx context.Context,
 	return out, nil
 }
 
+func (c *nuzurConnectionManagerClient) ApplyDataCR(ctx context.Context, in *ApplyDataCRRequest, opts ...grpc.CallOption) (*ApplyDataCRResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplyDataCRResponse)
+	err := c.cc.Invoke(ctx, NuzurConnectionManager_ApplyDataCR_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nuzurConnectionManagerClient) StartChangesDiff(ctx context.Context, in *StartChangesDiffRequest, opts ...grpc.CallOption) (*StartChangesDiffResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StartChangesDiffResponse)
@@ -184,6 +196,7 @@ type NuzurConnectionManagerServer interface {
 	ExecuteQuery(context.Context, *ExecuteQueryRequest) (*ExecuteQueryResponse, error)
 	GetQueryExecution(context.Context, *GetQueryExecutionRequest) (*GetQueryExecutionResponse, error)
 	CancelQueryExecution(context.Context, *CancelQueryExecutionRequest) (*CancelQueryExecutionResponse, error)
+	ApplyDataCR(context.Context, *ApplyDataCRRequest) (*ApplyDataCRResponse, error)
 	// diff changes
 	StartChangesDiff(context.Context, *StartChangesDiffRequest) (*StartChangesDiffResponse, error)
 	GetChangesDiff(context.Context, *GetChangesDiffRequest) (*GetChangesDiffResponse, error)
@@ -220,6 +233,9 @@ func (UnimplementedNuzurConnectionManagerServer) GetQueryExecution(context.Conte
 }
 func (UnimplementedNuzurConnectionManagerServer) CancelQueryExecution(context.Context, *CancelQueryExecutionRequest) (*CancelQueryExecutionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelQueryExecution not implemented")
+}
+func (UnimplementedNuzurConnectionManagerServer) ApplyDataCR(context.Context, *ApplyDataCRRequest) (*ApplyDataCRResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplyDataCR not implemented")
 }
 func (UnimplementedNuzurConnectionManagerServer) StartChangesDiff(context.Context, *StartChangesDiffRequest) (*StartChangesDiffResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartChangesDiff not implemented")
@@ -381,6 +397,24 @@ func _NuzurConnectionManager_CancelQueryExecution_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurConnectionManager_ApplyDataCR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplyDataCRRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurConnectionManagerServer).ApplyDataCR(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurConnectionManager_ApplyDataCR_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurConnectionManagerServer).ApplyDataCR(ctx, req.(*ApplyDataCRRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NuzurConnectionManager_StartChangesDiff_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StartChangesDiffRequest)
 	if err := dec(in); err != nil {
@@ -487,6 +521,10 @@ var NuzurConnectionManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelQueryExecution",
 			Handler:    _NuzurConnectionManager_CancelQueryExecution_Handler,
+		},
+		{
+			MethodName: "ApplyDataCR",
+			Handler:    _NuzurConnectionManager_ApplyDataCR_Handler,
 		},
 		{
 			MethodName: "StartChangesDiff",
