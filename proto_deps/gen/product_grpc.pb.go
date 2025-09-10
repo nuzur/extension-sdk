@@ -94,6 +94,11 @@ const (
 	NuzurProduct_DeleteObjectStoreSecret_FullMethodName                     = "/NuzurProduct/DeleteObjectStoreSecret"
 	NuzurProduct_GenerateSQLForCR_FullMethodName                            = "/NuzurProduct/GenerateSQLForCR"
 	NuzurProduct_ReviewDataChange_FullMethodName                            = "/NuzurProduct/ReviewDataChange"
+	NuzurProduct_GetMembership_FullMethodName                               = "/NuzurProduct/GetMembership"
+	NuzurProduct_CreateMembership_FullMethodName                            = "/NuzurProduct/CreateMembership"
+	NuzurProduct_UpdateMembership_FullMethodName                            = "/NuzurProduct/UpdateMembership"
+	NuzurProduct_MembershipForProject_FullMethodName                        = "/NuzurProduct/MembershipForProject"
+	NuzurProduct_MembershipForTeam_FullMethodName                           = "/NuzurProduct/MembershipForTeam"
 )
 
 // NuzurProductClient is the client API for NuzurProduct service.
@@ -189,6 +194,12 @@ type NuzurProductClient interface {
 	// data manager
 	GenerateSQLForCR(ctx context.Context, in *GenerateSQLForCRRequest, opts ...grpc.CallOption) (*GenerateSQLForCRResponse, error)
 	ReviewDataChange(ctx context.Context, in *ReviewDataChangeRequest, opts ...grpc.CallOption) (*ReviewDataChangeResponse, error)
+	// membership
+	GetMembership(ctx context.Context, in *GetMembershipRequest, opts ...grpc.CallOption) (*gen.Membership, error)
+	CreateMembership(ctx context.Context, in *CreateMembershipRequest, opts ...grpc.CallOption) (*gen.Membership, error)
+	UpdateMembership(ctx context.Context, in *UpdateMembershipRequest, opts ...grpc.CallOption) (*gen.Membership, error)
+	MembershipForProject(ctx context.Context, in *MembershipForProjectRequest, opts ...grpc.CallOption) (*gen.Membership, error)
+	MembershipForTeam(ctx context.Context, in *MembershipForTeamRequest, opts ...grpc.CallOption) (*gen.Membership, error)
 }
 
 type nuzurProductClient struct {
@@ -939,6 +950,56 @@ func (c *nuzurProductClient) ReviewDataChange(ctx context.Context, in *ReviewDat
 	return out, nil
 }
 
+func (c *nuzurProductClient) GetMembership(ctx context.Context, in *GetMembershipRequest, opts ...grpc.CallOption) (*gen.Membership, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Membership)
+	err := c.cc.Invoke(ctx, NuzurProduct_GetMembership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) CreateMembership(ctx context.Context, in *CreateMembershipRequest, opts ...grpc.CallOption) (*gen.Membership, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Membership)
+	err := c.cc.Invoke(ctx, NuzurProduct_CreateMembership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) UpdateMembership(ctx context.Context, in *UpdateMembershipRequest, opts ...grpc.CallOption) (*gen.Membership, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Membership)
+	err := c.cc.Invoke(ctx, NuzurProduct_UpdateMembership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) MembershipForProject(ctx context.Context, in *MembershipForProjectRequest, opts ...grpc.CallOption) (*gen.Membership, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Membership)
+	err := c.cc.Invoke(ctx, NuzurProduct_MembershipForProject_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) MembershipForTeam(ctx context.Context, in *MembershipForTeamRequest, opts ...grpc.CallOption) (*gen.Membership, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(gen.Membership)
+	err := c.cc.Invoke(ctx, NuzurProduct_MembershipForTeam_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NuzurProductServer is the server API for NuzurProduct service.
 // All implementations must embed UnimplementedNuzurProductServer
 // for forward compatibility.
@@ -1032,6 +1093,12 @@ type NuzurProductServer interface {
 	// data manager
 	GenerateSQLForCR(context.Context, *GenerateSQLForCRRequest) (*GenerateSQLForCRResponse, error)
 	ReviewDataChange(context.Context, *ReviewDataChangeRequest) (*ReviewDataChangeResponse, error)
+	// membership
+	GetMembership(context.Context, *GetMembershipRequest) (*gen.Membership, error)
+	CreateMembership(context.Context, *CreateMembershipRequest) (*gen.Membership, error)
+	UpdateMembership(context.Context, *UpdateMembershipRequest) (*gen.Membership, error)
+	MembershipForProject(context.Context, *MembershipForProjectRequest) (*gen.Membership, error)
+	MembershipForTeam(context.Context, *MembershipForTeamRequest) (*gen.Membership, error)
 	mustEmbedUnimplementedNuzurProductServer()
 }
 
@@ -1263,6 +1330,21 @@ func (UnimplementedNuzurProductServer) GenerateSQLForCR(context.Context, *Genera
 }
 func (UnimplementedNuzurProductServer) ReviewDataChange(context.Context, *ReviewDataChangeRequest) (*ReviewDataChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReviewDataChange not implemented")
+}
+func (UnimplementedNuzurProductServer) GetMembership(context.Context, *GetMembershipRequest) (*gen.Membership, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMembership not implemented")
+}
+func (UnimplementedNuzurProductServer) CreateMembership(context.Context, *CreateMembershipRequest) (*gen.Membership, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMembership not implemented")
+}
+func (UnimplementedNuzurProductServer) UpdateMembership(context.Context, *UpdateMembershipRequest) (*gen.Membership, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMembership not implemented")
+}
+func (UnimplementedNuzurProductServer) MembershipForProject(context.Context, *MembershipForProjectRequest) (*gen.Membership, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MembershipForProject not implemented")
+}
+func (UnimplementedNuzurProductServer) MembershipForTeam(context.Context, *MembershipForTeamRequest) (*gen.Membership, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MembershipForTeam not implemented")
 }
 func (UnimplementedNuzurProductServer) mustEmbedUnimplementedNuzurProductServer() {}
 func (UnimplementedNuzurProductServer) testEmbeddedByValue()                      {}
@@ -2617,6 +2699,96 @@ func _NuzurProduct_ReviewDataChange_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_GetMembership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMembershipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).GetMembership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_GetMembership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).GetMembership(ctx, req.(*GetMembershipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_CreateMembership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateMembershipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).CreateMembership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_CreateMembership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).CreateMembership(ctx, req.(*CreateMembershipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_UpdateMembership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateMembershipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UpdateMembership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UpdateMembership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UpdateMembership(ctx, req.(*UpdateMembershipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_MembershipForProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MembershipForProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).MembershipForProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_MembershipForProject_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).MembershipForProject(ctx, req.(*MembershipForProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_MembershipForTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MembershipForTeamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).MembershipForTeam(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_MembershipForTeam_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).MembershipForTeam(ctx, req.(*MembershipForTeamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NuzurProduct_ServiceDesc is the grpc.ServiceDesc for NuzurProduct service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2919,6 +3091,26 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReviewDataChange",
 			Handler:    _NuzurProduct_ReviewDataChange_Handler,
+		},
+		{
+			MethodName: "GetMembership",
+			Handler:    _NuzurProduct_GetMembership_Handler,
+		},
+		{
+			MethodName: "CreateMembership",
+			Handler:    _NuzurProduct_CreateMembership_Handler,
+		},
+		{
+			MethodName: "UpdateMembership",
+			Handler:    _NuzurProduct_UpdateMembership_Handler,
+		},
+		{
+			MethodName: "MembershipForProject",
+			Handler:    _NuzurProduct_MembershipForProject_Handler,
+		},
+		{
+			MethodName: "MembershipForTeam",
+			Handler:    _NuzurProduct_MembershipForTeam_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
