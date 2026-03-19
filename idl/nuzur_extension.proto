@@ -35,7 +35,7 @@ message GetMetadataResponse {
 message StartExecutionRequest {
     string project_uuid = 1;
     string project_version_uuid = 2;
-    string project_extension_uuid = 3;     // for automatic extension execution   
+    string project_extension_uuid = 3; // for automatic extension execution
     string config_values = 4; // for manual extensionexecution
     string locale = 5;
 }
@@ -45,6 +45,7 @@ enum ExecutionResponseType {
     EXECUTION_RESPONSE_TYPE_FINAL = 1;
     EXECUTION_RESPONSE_TYPE_STEP = 2;
     EXECUTION_RESPONSE_TYPE_ASYNC = 3;
+    EXECUTION_RESPONSE_TYPE_FAILURE = 4;
 }
 
 enum ExecutionStatus {
@@ -72,6 +73,7 @@ message ExecutionResponseTypeData {
     ExecutionResponseTypeFinalData final = 1;
     ExecutionResponseTypeStepData step = 2;
     ExecutionResponseTypeAsyncData async = 3;
+    ExecutionResponseTypeFailureData failure = 4;
 }
 
 message ExecutionResponseTypeFinalData {
@@ -91,6 +93,10 @@ message ExecutionResponseTypeStepData {
     ExecutionStepType type = 2;
     ExecutionResponseDisplayBlock display_block = 3;
     repeated ExtensionInputField inputs_fields = 4;
+}
+
+message ExecutionResponseTypeFailureData {
+    string error_message = 1;
 }
 
 enum DisplayBlockContentType {
