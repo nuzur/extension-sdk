@@ -56,7 +56,7 @@ func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest
 		return nil, errors.New("project version uuid is required")
 	}
 
-	if req.Extension.Pro == true {
+	if req.Extension != nil && req.Extension.Pro == true {
 		res, err := c.productClient.IsProActiveForProject(ctx, &gen.IsProActiveForProjectRequest{
 			ProjectUuid: req.ProjectUUID.String(),
 		})
