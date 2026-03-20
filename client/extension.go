@@ -44,6 +44,7 @@ type CreateExecutionRequest struct {
 	ProjectVersionUUID   uuid.UUID
 	ProjectExtensionUUID uuid.UUID
 	Metadata             string
+	Extension            *nemgen.Extension
 }
 
 func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest) (*nemgen.ExtensionExecution, error) {
@@ -54,6 +55,21 @@ func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest
 	if req.ProjectVersionUUID == uuid.Nil {
 		return nil, errors.New("project version uuid is required")
 	}
+
+	if req.Extension.Pro == true {
+		res, err := c.productClient.IsProActiveForProject(ctx, &gen.IsProActiveForProjectRequest{
+			ProjectUuid: req.ProjectUUID.String(),
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		if !res.IsProActive {
+			return nil, errors.New("extension requires pro plan")
+		}
+	}
+
 	return c.productClient.CreateExtensionExecution(ctx, &gen.CreateExtensionExecutionRequest{
 		Execution: &nemgen.ExtensionExecution{
 			ExtensionUuid:        c.metadata.UUID,
