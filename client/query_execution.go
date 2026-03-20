@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gofrs/uuid"
+	pb "github.com/nuzur/extension-sdk/idl/gen"
 	"github.com/nuzur/extension-sdk/proto_deps/gen"
 )
 
@@ -21,4 +22,15 @@ func (c *Client) CancelQueryExecution(ctx context.Context, queryExecutionUUID uu
 	return c.connectionManagerClient.CancelQueryExecution(ctx, &gen.CancelQueryExecutionRequest{
 		ExecutionUuid: queryExecutionUUID.String(),
 	})
+}
+
+func FailureStartResponse(message string) *pb.StartExecutionResponse {
+	return &pb.StartExecutionResponse{
+		Type: pb.ExecutionResponseType_EXECUTION_RESPONSE_TYPE_FAILURE,
+		Data: &pb.ExecutionResponseTypeData{
+			Failure: &pb.ExecutionResponseTypeFailureData{
+				ErrorMessage: message,
+			},
+		},
+	}
 }
