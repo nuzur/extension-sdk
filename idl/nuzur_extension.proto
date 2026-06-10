@@ -221,6 +221,7 @@ enum EntityType {
     ENTITY_TYPE_DB_CONNECTION = 9;
     ENTITY_TYPE_LOCAL_AGENT = 10;
     ENTITY_TYPE_LOCAL_AGENT_CONNECTION = 11;
+    ENTITY_TYPE_LOCAL_AGENT_SCHEMA = 12;
 }
 
 message ExtensionInputEnumOption {
