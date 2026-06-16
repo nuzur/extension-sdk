@@ -23,6 +23,10 @@ type Params struct {
 	Server    pb.NuzurExtensionServer
 }
 
+type Drainer interface {
+	Drain(ctx context.Context)
+}
+
 func New(params Params) *grpc.Server {
 	log := params.Logger
 	s := grpc.NewServer(
@@ -60,7 +64,24 @@ func New(params Params) *grpc.Server {
 
 		},
 		OnStop: func(ctx context.Context) error {
-			s.Stop()
+			log.Info("extension server shutting down: stopping new RPCs and draining in-flight work")
+
+			gracefulDone := make(chan struct{})
+			go func() {
+				s.GracefulStop()
+				close(gracefulDone)
+			}()
+
+			if drainer, ok := params.Server.(Drainer); ok {
+				drainer.Drain(ctx)
+			}
+			log.Info("extension server drain complete")
+
+			select {
+			case <-gracefulDone:
+			default:
+				s.Stop()
+			}
 			return nil
 		},
 	})
