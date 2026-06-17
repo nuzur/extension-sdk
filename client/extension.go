@@ -56,18 +56,18 @@ func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest
 		return nil, errors.New("project version uuid is required")
 	}
 
-	if req.Extension != nil && req.Extension.Pro == true {
-		res, err := c.productClient.IsProActiveForProject(ctx, &gen.IsProActiveForProjectRequest{
-			ProjectUuid: req.ProjectUUID.String(),
-		})
+	// Check monthly execution limits for Pro extensions
+	extUUID := c.metadata.UUID
+	if req.Extension != nil && req.Extension.Uuid != "" {
+		extUUID = req.Extension.Uuid
+	}
 
-		if err != nil {
-			return nil, err
-		}
-
-		if !res.IsProActive {
-			return nil, errors.New("extension requires pro plan")
-		}
+	limitRes, err := c.productClient.CheckExtensionExecutionLimit(ctx, &gen.CheckExtensionExecutionLimitRequest{
+		ProjectUuid:   req.ProjectUUID.String(),
+		ExtensionUuid: extUUID,
+	})
+	if err == nil && limitRes.IsLimited {
+		return nil, errors.New("monthly limit of 5 Pro extension executions reached. Please upgrade to Pro for unlimited executions.")
 	}
 
 	return c.productClient.CreateExtensionExecution(ctx, &gen.CreateExtensionExecutionRequest{
@@ -82,6 +82,42 @@ func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest
 			Metadata:             req.Metadata,
 		},
 	})
+}
+
+type CheckLimitRequest struct {
+	ProjectUUID   uuid.UUID
+	ExtensionUUID uuid.UUID
+}
+
+type CheckLimitResponse struct {
+	IsLimited bool
+	Limit     int64
+	Current   int64
+}
+
+func (c *Client) CheckExtensionExecutionLimit(ctx context.Context, req CheckLimitRequest) (*CheckLimitResponse, error) {
+	if req.ProjectUUID == uuid.Nil {
+		return nil, errors.New("project uuid is required")
+	}
+
+	extUUID := c.metadata.UUID
+	if req.ExtensionUUID != uuid.Nil {
+		extUUID = req.ExtensionUUID.String()
+	}
+
+	res, err := c.productClient.CheckExtensionExecutionLimit(ctx, &gen.CheckExtensionExecutionLimitRequest{
+		ProjectUuid:   req.ProjectUUID.String(),
+		ExtensionUuid: extUUID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &CheckLimitResponse{
+		IsLimited: res.IsLimited,
+		Limit:     res.Limit,
+		Current:   res.Current,
+	}, nil
 }
 
 type UpdateExecutionRequest struct {

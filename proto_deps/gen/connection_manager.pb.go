@@ -1250,8 +1250,11 @@ type StartChangesDiffRequest struct {
 	TypeConfig         *gen.UserConnectionTypeConfig `protobuf:"bytes,4,opt,name=type_config,json=typeConfig,proto3" json:"type_config,omitempty"`
 	Schema             string                        `protobuf:"bytes,5,opt,name=schema,proto3" json:"schema,omitempty"`
 	Locale             string                        `protobuf:"bytes,6,opt,name=locale,proto3" json:"locale,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// force bypasses the cached diff result and recomputes from scratch.
+	// When false (default), a result cached within the TTL is returned.
+	Force         bool `protobuf:"varint,7,opt,name=force,proto3" json:"force,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *StartChangesDiffRequest) Reset() {
@@ -1324,6 +1327,13 @@ func (x *StartChangesDiffRequest) GetLocale() string {
 		return x.Locale
 	}
 	return ""
+}
+
+func (x *StartChangesDiffRequest) GetForce() bool {
+	if x != nil {
+		return x.Force
+	}
+	return false
 }
 
 type StartChangesDiffResponse struct {
@@ -2241,8 +2251,13 @@ type RunQueryRequest struct {
 	Sql                      string                 `protobuf:"bytes,3,opt,name=sql,proto3" json:"sql,omitempty"`
 	// Args are sent as strings; the driver coerces them. Phase 4 keeps the
 	// string-only path; richer typing can come later if needed.
-	Args          []string `protobuf:"bytes,4,rep,name=args,proto3" json:"args,omitempty"`
-	TxId          string   `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"` // empty = no transaction
+	Args []string `protobuf:"bytes,4,rep,name=args,proto3" json:"args,omitempty"`
+	TxId string   `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"` // empty = no transaction
+	// schema selects the active database/schema for this query. For mysql
+	// LOCAL connections (which no longer pin a database in their DSN), the
+	// agent issues `USE <schema>` on the same conn before running the SQL.
+	// Empty = use whatever the underlying connection defaults to.
+	Schema        string `protobuf:"bytes,6,opt,name=schema,proto3" json:"schema,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2312,6 +2327,13 @@ func (x *RunQueryRequest) GetTxId() string {
 	return ""
 }
 
+func (x *RunQueryRequest) GetSchema() string {
+	if x != nil {
+		return x.Schema
+	}
+	return ""
+}
+
 // ExecRequest is the non-row-returning counterpart of RunQueryRequest. Used
 // for INSERT/UPDATE/DELETE/DDL. Reply is a single ExecResponse with
 // rows_affected + last_insert_id, or a QueryError on failure.
@@ -2322,6 +2344,7 @@ type ExecRequest struct {
 	Sql                      string                 `protobuf:"bytes,3,opt,name=sql,proto3" json:"sql,omitempty"`
 	Args                     []string               `protobuf:"bytes,4,rep,name=args,proto3" json:"args,omitempty"`
 	TxId                     string                 `protobuf:"bytes,5,opt,name=tx_id,json=txId,proto3" json:"tx_id,omitempty"` // empty = no transaction
+	Schema                   string                 `protobuf:"bytes,6,opt,name=schema,proto3" json:"schema,omitempty"`         // see RunQueryRequest.schema
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -2387,6 +2410,13 @@ func (x *ExecRequest) GetArgs() []string {
 func (x *ExecRequest) GetTxId() string {
 	if x != nil {
 		return x.TxId
+	}
+	return ""
+}
+
+func (x *ExecRequest) GetSchema() string {
+	if x != nil {
+		return x.Schema
 	}
 	return ""
 }
@@ -2459,8 +2489,12 @@ type BeginTxRequest struct {
 	state                    protoimpl.MessageState `protogen:"open.v1"`
 	RequestId                uint64                 `protobuf:"varint,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
 	LocalAgentConnectionUuid string                 `protobuf:"bytes,2,opt,name=local_agent_connection_uuid,json=localAgentConnectionUuid,proto3" json:"local_agent_connection_uuid,omitempty"`
-	unknownFields            protoimpl.UnknownFields
-	sizeCache                protoimpl.SizeCache
+	// schema is applied to the tx via `USE <schema>` on its dedicated conn
+	// right after BEGIN; subsequent RunQueryInTx/Exec on this tx_id inherit it
+	// without needing to repeat the USE.
+	Schema        string `protobuf:"bytes,3,opt,name=schema,proto3" json:"schema,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *BeginTxRequest) Reset() {
@@ -2503,6 +2537,13 @@ func (x *BeginTxRequest) GetRequestId() uint64 {
 func (x *BeginTxRequest) GetLocalAgentConnectionUuid() string {
 	if x != nil {
 		return x.LocalAgentConnectionUuid
+	}
+	return ""
+}
+
+func (x *BeginTxRequest) GetSchema() string {
+	if x != nil {
+		return x.Schema
 	}
 	return ""
 }
@@ -3243,7 +3284,7 @@ const file_connection_manager_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\x0e2\x15.QueryExecutionStatusR\x06status\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x124\n" +
 	"\x06result\x18\x03 \x01(\v2\x1c.nem.UserConnectionExecutionR\x06result\x12!\n" +
-	"\fjson_results\x18\x04 \x01(\tR\vjsonResults\"\x8b\x02\n" +
+	"\fjson_results\x18\x04 \x01(\tR\vjsonResults\"\xa1\x02\n" +
 	"\x17StartChangesDiffRequest\x12!\n" +
 	"\fproject_uuid\x18\x01 \x01(\tR\vprojectUuid\x120\n" +
 	"\x14project_version_uuid\x18\x02 \x01(\tR\x12projectVersionUuid\x12+\n" +
@@ -3251,7 +3292,8 @@ const file_connection_manager_proto_rawDesc = "" +
 	"\vtype_config\x18\x04 \x01(\v2\x1d.nem.UserConnectionTypeConfigR\n" +
 	"typeConfig\x12\x16\n" +
 	"\x06schema\x18\x05 \x01(\tR\x06schema\x12\x16\n" +
-	"\x06locale\x18\x06 \x01(\tR\x06locale\"F\n" +
+	"\x06locale\x18\x06 \x01(\tR\x06locale\x12\x14\n" +
+	"\x05force\x18\a \x01(\bR\x05force\"F\n" +
 	"\x18StartChangesDiffResponse\x12*\n" +
 	"\x11changes_diff_uuid\x18\x01 \x01(\tR\x0fchangesDiffUuid\"C\n" +
 	"\x15GetChangesDiffRequest\x12*\n" +
@@ -3308,30 +3350,33 @@ const file_connection_manager_proto_rawDesc = "" +
 	"\x13server_time_unix_ms\x18\x02 \x01(\x03R\x10serverTimeUnixMs\"%\n" +
 	"\x04Pong\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\x04R\trequestId\"\xaa\x01\n" +
+	"request_id\x18\x01 \x01(\x04R\trequestId\"\xc2\x01\n" +
 	"\x0fRunQueryRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\x04R\trequestId\x12=\n" +
 	"\x1blocal_agent_connection_uuid\x18\x02 \x01(\tR\x18localAgentConnectionUuid\x12\x10\n" +
 	"\x03sql\x18\x03 \x01(\tR\x03sql\x12\x12\n" +
 	"\x04args\x18\x04 \x03(\tR\x04args\x12\x13\n" +
-	"\x05tx_id\x18\x05 \x01(\tR\x04txId\"\xa6\x01\n" +
+	"\x05tx_id\x18\x05 \x01(\tR\x04txId\x12\x16\n" +
+	"\x06schema\x18\x06 \x01(\tR\x06schema\"\xbe\x01\n" +
 	"\vExecRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\x04R\trequestId\x12=\n" +
 	"\x1blocal_agent_connection_uuid\x18\x02 \x01(\tR\x18localAgentConnectionUuid\x12\x10\n" +
 	"\x03sql\x18\x03 \x01(\tR\x03sql\x12\x12\n" +
 	"\x04args\x18\x04 \x03(\tR\x04args\x12\x13\n" +
-	"\x05tx_id\x18\x05 \x01(\tR\x04txId\"x\n" +
+	"\x05tx_id\x18\x05 \x01(\tR\x04txId\x12\x16\n" +
+	"\x06schema\x18\x06 \x01(\tR\x06schema\"x\n" +
 	"\fExecResponse\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\x04R\trequestId\x12#\n" +
 	"\rrows_affected\x18\x02 \x01(\x03R\frowsAffected\x12$\n" +
-	"\x0elast_insert_id\x18\x03 \x01(\x03R\flastInsertId\"n\n" +
+	"\x0elast_insert_id\x18\x03 \x01(\x03R\flastInsertId\"\x86\x01\n" +
 	"\x0eBeginTxRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\x04R\trequestId\x12=\n" +
-	"\x1blocal_agent_connection_uuid\x18\x02 \x01(\tR\x18localAgentConnectionUuid\"E\n" +
+	"\x1blocal_agent_connection_uuid\x18\x02 \x01(\tR\x18localAgentConnectionUuid\x12\x16\n" +
+	"\x06schema\x18\x03 \x01(\tR\x06schema\"E\n" +
 	"\x0fBeginTxResponse\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\x04R\trequestId\x12\x13\n" +
