@@ -25,7 +25,7 @@ require (
 
 require (
 	github.com/nicksnyder/go-i18n/v2 v2.4.1
-	github.com/nuzur/nem v1.1.4
+	github.com/nuzur/nem v1.1.6
 	github.com/stretchr/testify v1.11.1
 	go.uber.org/config v1.4.1
 	go.uber.org/fx v1.24.0
