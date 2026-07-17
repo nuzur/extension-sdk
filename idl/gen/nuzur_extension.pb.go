@@ -800,8 +800,14 @@ func (x *ExecutionResponseTypeFinalData) GetRequiresProjectVersionUpdate() bool 
 type ExecutionResponseTypeAsyncData struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StatusMessage string                 `protobuf:"bytes,1,opt,name=status_message,json=statusMessage,proto3" json:"status_message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Set while the execution is waiting in the global admission queue. Clients
+	// can render a dedicated "waiting in queue" state instead of treating it as
+	// active progress. Older clients ignore these and fall back to status_message.
+	Queued               bool  `protobuf:"varint,2,opt,name=queued,proto3" json:"queued,omitempty"`
+	QueuePosition        int64 `protobuf:"varint,3,opt,name=queue_position,json=queuePosition,proto3" json:"queue_position,omitempty"`                        // 1-based place in line
+	EstimatedWaitSeconds int64 `protobuf:"varint,4,opt,name=estimated_wait_seconds,json=estimatedWaitSeconds,proto3" json:"estimated_wait_seconds,omitempty"` // rough ETA
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *ExecutionResponseTypeAsyncData) Reset() {
@@ -839,6 +845,27 @@ func (x *ExecutionResponseTypeAsyncData) GetStatusMessage() string {
 		return x.StatusMessage
 	}
 	return ""
+}
+
+func (x *ExecutionResponseTypeAsyncData) GetQueued() bool {
+	if x != nil {
+		return x.Queued
+	}
+	return false
+}
+
+func (x *ExecutionResponseTypeAsyncData) GetQueuePosition() int64 {
+	if x != nil {
+		return x.QueuePosition
+	}
+	return 0
+}
+
+func (x *ExecutionResponseTypeAsyncData) GetEstimatedWaitSeconds() int64 {
+	if x != nil {
+		return x.EstimatedWaitSeconds
+	}
+	return 0
 }
 
 type ExecutionResponseTypeStepData struct {
@@ -1804,9 +1831,12 @@ const file_nuzur_extension_proto_rawDesc = "" +
 	"\x0estatus_message\x18\x02 \x01(\tR\rstatusMessage\x12*\n" +
 	"\x11file_download_url\x18\x03 \x01(\tR\x0ffileDownloadUrl\x12E\n" +
 	"\x0edisplay_blocks\x18\x04 \x03(\v2\x1e.ExecutionResponseDisplayBlockR\rdisplayBlocks\x12E\n" +
-	"\x1frequires_project_version_update\x18\x05 \x01(\bR\x1crequiresProjectVersionUpdate\"G\n" +
+	"\x1frequires_project_version_update\x18\x05 \x01(\bR\x1crequiresProjectVersionUpdate\"\xbc\x01\n" +
 	"\x1eExecutionResponseTypeAsyncData\x12%\n" +
-	"\x0estatus_message\x18\x01 \x01(\tR\rstatusMessage\"\xf0\x01\n" +
+	"\x0estatus_message\x18\x01 \x01(\tR\rstatusMessage\x12\x16\n" +
+	"\x06queued\x18\x02 \x01(\bR\x06queued\x12%\n" +
+	"\x0equeue_position\x18\x03 \x01(\x03R\rqueuePosition\x124\n" +
+	"\x16estimated_wait_seconds\x18\x04 \x01(\x03R\x14estimatedWaitSeconds\"\xf0\x01\n" +
 	"\x1dExecutionResponseTypeStepData\x12'\n" +
 	"\x0fstep_identifier\x18\x01 \x01(\tR\x0estepIdentifier\x12&\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x12.ExecutionStepTypeR\x04type\x12C\n" +

@@ -86,6 +86,12 @@ message ExecutionResponseTypeFinalData {
 
 message ExecutionResponseTypeAsyncData {
     string status_message = 1;
+    // Set while the execution is waiting in the global admission queue. Clients
+    // can render a dedicated "waiting in queue" state instead of treating it as
+    // active progress. Older clients ignore these and fall back to status_message.
+    bool queued = 2;
+    int64 queue_position = 3;         // 1-based place in line
+    int64 estimated_wait_seconds = 4; // rough ETA
 }
 
 message ExecutionResponseTypeStepData {
