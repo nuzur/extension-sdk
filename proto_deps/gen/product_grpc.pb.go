@@ -90,6 +90,8 @@ const (
 	NuzurProduct_CreateExtensionExecution_FullMethodName                    = "/NuzurProduct/CreateExtensionExecution"
 	NuzurProduct_UpdateExtensionExecution_FullMethodName                    = "/NuzurProduct/UpdateExtensionExecution"
 	NuzurProduct_CheckExtensionExecutionLimit_FullMethodName                = "/NuzurProduct/CheckExtensionExecutionLimit"
+	NuzurProduct_AcquireExecutionSlot_FullMethodName                        = "/NuzurProduct/AcquireExecutionSlot"
+	NuzurProduct_HeartbeatExecution_FullMethodName                          = "/NuzurProduct/HeartbeatExecution"
 	NuzurProduct_ListUserChangeRequests_FullMethodName                      = "/NuzurProduct/ListUserChangeRequests"
 	NuzurProduct_GetChangeRequest_FullMethodName                            = "/NuzurProduct/GetChangeRequest"
 	NuzurProduct_CreateChangeRequest_FullMethodName                         = "/NuzurProduct/CreateChangeRequest"
@@ -137,6 +139,8 @@ const (
 	NuzurProduct_ExchangeProvisioningToken_FullMethodName                   = "/NuzurProduct/ExchangeProvisioningToken"
 	NuzurProduct_UpsertDeployment_FullMethodName                            = "/NuzurProduct/UpsertDeployment"
 	NuzurProduct_ListDeployments_FullMethodName                             = "/NuzurProduct/ListDeployments"
+	NuzurProduct_ListDeploymentRevisions_FullMethodName                     = "/NuzurProduct/ListDeploymentRevisions"
+	NuzurProduct_UpdateDeploymentRevisionStatus_FullMethodName              = "/NuzurProduct/UpdateDeploymentRevisionStatus"
 	NuzurProduct_MarkDeploymentDestroyed_FullMethodName                     = "/NuzurProduct/MarkDeploymentDestroyed"
 	NuzurProduct_CreateAutomation_FullMethodName                            = "/NuzurProduct/CreateAutomation"
 	NuzurProduct_RotateAutomationSecret_FullMethodName                      = "/NuzurProduct/RotateAutomationSecret"
@@ -241,6 +245,8 @@ type NuzurProductClient interface {
 	CreateExtensionExecution(ctx context.Context, in *CreateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
 	UpdateExtensionExecution(ctx context.Context, in *UpdateExtensionExecutionRequest, opts ...grpc.CallOption) (*gen.ExtensionExecution, error)
 	CheckExtensionExecutionLimit(ctx context.Context, in *CheckExtensionExecutionLimitRequest, opts ...grpc.CallOption) (*CheckExtensionExecutionLimitResponse, error)
+	AcquireExecutionSlot(ctx context.Context, in *AcquireExecutionSlotRequest, opts ...grpc.CallOption) (*AcquireExecutionSlotResponse, error)
+	HeartbeatExecution(ctx context.Context, in *HeartbeatExecutionRequest, opts ...grpc.CallOption) (*HeartbeatExecutionResponse, error)
 	// change request
 	ListUserChangeRequests(ctx context.Context, in *ListUserChangeRequestsRequest, opts ...grpc.CallOption) (*ListUserChangeRequestsResponse, error)
 	GetChangeRequest(ctx context.Context, in *GetChangeRequestRequest, opts ...grpc.CallOption) (*gen.ChangeRequest, error)
@@ -301,6 +307,8 @@ type NuzurProductClient interface {
 	// destroyed on teardown; the web lists them (user-scoped) + pulls live health.
 	UpsertDeployment(ctx context.Context, in *UpsertDeploymentRequest, opts ...grpc.CallOption) (*UpsertDeploymentResponse, error)
 	ListDeployments(ctx context.Context, in *ListDeploymentsRequest, opts ...grpc.CallOption) (*ListDeploymentsResponse, error)
+	ListDeploymentRevisions(ctx context.Context, in *ListDeploymentRevisionsRequest, opts ...grpc.CallOption) (*ListDeploymentRevisionsResponse, error)
+	UpdateDeploymentRevisionStatus(ctx context.Context, in *UpdateDeploymentRevisionStatusRequest, opts ...grpc.CallOption) (*UpdateDeploymentRevisionStatusResponse, error)
 	MarkDeploymentDestroyed(ctx context.Context, in *MarkDeploymentDestroyedRequest, opts ...grpc.CallOption) (*MarkDeploymentDestroyedResponse, error)
 	// automations
 	CreateAutomation(ctx context.Context, in *CreateAutomationRequest, opts ...grpc.CallOption) (*CreateAutomationResponse, error)
@@ -1024,6 +1032,26 @@ func (c *nuzurProductClient) CheckExtensionExecutionLimit(ctx context.Context, i
 	return out, nil
 }
 
+func (c *nuzurProductClient) AcquireExecutionSlot(ctx context.Context, in *AcquireExecutionSlotRequest, opts ...grpc.CallOption) (*AcquireExecutionSlotResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AcquireExecutionSlotResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_AcquireExecutionSlot_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) HeartbeatExecution(ctx context.Context, in *HeartbeatExecutionRequest, opts ...grpc.CallOption) (*HeartbeatExecutionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HeartbeatExecutionResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_HeartbeatExecution_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nuzurProductClient) ListUserChangeRequests(ctx context.Context, in *ListUserChangeRequestsRequest, opts ...grpc.CallOption) (*ListUserChangeRequestsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListUserChangeRequestsResponse)
@@ -1494,6 +1522,26 @@ func (c *nuzurProductClient) ListDeployments(ctx context.Context, in *ListDeploy
 	return out, nil
 }
 
+func (c *nuzurProductClient) ListDeploymentRevisions(ctx context.Context, in *ListDeploymentRevisionsRequest, opts ...grpc.CallOption) (*ListDeploymentRevisionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListDeploymentRevisionsResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_ListDeploymentRevisions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nuzurProductClient) UpdateDeploymentRevisionStatus(ctx context.Context, in *UpdateDeploymentRevisionStatusRequest, opts ...grpc.CallOption) (*UpdateDeploymentRevisionStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateDeploymentRevisionStatusResponse)
+	err := c.cc.Invoke(ctx, NuzurProduct_UpdateDeploymentRevisionStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nuzurProductClient) MarkDeploymentDestroyed(ctx context.Context, in *MarkDeploymentDestroyedRequest, opts ...grpc.CallOption) (*MarkDeploymentDestroyedResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MarkDeploymentDestroyedResponse)
@@ -1704,6 +1752,8 @@ type NuzurProductServer interface {
 	CreateExtensionExecution(context.Context, *CreateExtensionExecutionRequest) (*gen.ExtensionExecution, error)
 	UpdateExtensionExecution(context.Context, *UpdateExtensionExecutionRequest) (*gen.ExtensionExecution, error)
 	CheckExtensionExecutionLimit(context.Context, *CheckExtensionExecutionLimitRequest) (*CheckExtensionExecutionLimitResponse, error)
+	AcquireExecutionSlot(context.Context, *AcquireExecutionSlotRequest) (*AcquireExecutionSlotResponse, error)
+	HeartbeatExecution(context.Context, *HeartbeatExecutionRequest) (*HeartbeatExecutionResponse, error)
 	// change request
 	ListUserChangeRequests(context.Context, *ListUserChangeRequestsRequest) (*ListUserChangeRequestsResponse, error)
 	GetChangeRequest(context.Context, *GetChangeRequestRequest) (*gen.ChangeRequest, error)
@@ -1764,6 +1814,8 @@ type NuzurProductServer interface {
 	// destroyed on teardown; the web lists them (user-scoped) + pulls live health.
 	UpsertDeployment(context.Context, *UpsertDeploymentRequest) (*UpsertDeploymentResponse, error)
 	ListDeployments(context.Context, *ListDeploymentsRequest) (*ListDeploymentsResponse, error)
+	ListDeploymentRevisions(context.Context, *ListDeploymentRevisionsRequest) (*ListDeploymentRevisionsResponse, error)
+	UpdateDeploymentRevisionStatus(context.Context, *UpdateDeploymentRevisionStatusRequest) (*UpdateDeploymentRevisionStatusResponse, error)
 	MarkDeploymentDestroyed(context.Context, *MarkDeploymentDestroyedRequest) (*MarkDeploymentDestroyedResponse, error)
 	// automations
 	CreateAutomation(context.Context, *CreateAutomationRequest) (*CreateAutomationResponse, error)
@@ -1997,6 +2049,12 @@ func (UnimplementedNuzurProductServer) UpdateExtensionExecution(context.Context,
 func (UnimplementedNuzurProductServer) CheckExtensionExecutionLimit(context.Context, *CheckExtensionExecutionLimitRequest) (*CheckExtensionExecutionLimitResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckExtensionExecutionLimit not implemented")
 }
+func (UnimplementedNuzurProductServer) AcquireExecutionSlot(context.Context, *AcquireExecutionSlotRequest) (*AcquireExecutionSlotResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AcquireExecutionSlot not implemented")
+}
+func (UnimplementedNuzurProductServer) HeartbeatExecution(context.Context, *HeartbeatExecutionRequest) (*HeartbeatExecutionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HeartbeatExecution not implemented")
+}
 func (UnimplementedNuzurProductServer) ListUserChangeRequests(context.Context, *ListUserChangeRequestsRequest) (*ListUserChangeRequestsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListUserChangeRequests not implemented")
 }
@@ -2137,6 +2195,12 @@ func (UnimplementedNuzurProductServer) UpsertDeployment(context.Context, *Upsert
 }
 func (UnimplementedNuzurProductServer) ListDeployments(context.Context, *ListDeploymentsRequest) (*ListDeploymentsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListDeployments not implemented")
+}
+func (UnimplementedNuzurProductServer) ListDeploymentRevisions(context.Context, *ListDeploymentRevisionsRequest) (*ListDeploymentRevisionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListDeploymentRevisions not implemented")
+}
+func (UnimplementedNuzurProductServer) UpdateDeploymentRevisionStatus(context.Context, *UpdateDeploymentRevisionStatusRequest) (*UpdateDeploymentRevisionStatusResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateDeploymentRevisionStatus not implemented")
 }
 func (UnimplementedNuzurProductServer) MarkDeploymentDestroyed(context.Context, *MarkDeploymentDestroyedRequest) (*MarkDeploymentDestroyedResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MarkDeploymentDestroyed not implemented")
@@ -3455,6 +3519,42 @@ func _NuzurProduct_CheckExtensionExecutionLimit_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_AcquireExecutionSlot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AcquireExecutionSlotRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).AcquireExecutionSlot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_AcquireExecutionSlot_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).AcquireExecutionSlot(ctx, req.(*AcquireExecutionSlotRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_HeartbeatExecution_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HeartbeatExecutionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).HeartbeatExecution(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_HeartbeatExecution_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).HeartbeatExecution(ctx, req.(*HeartbeatExecutionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NuzurProduct_ListUserChangeRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListUserChangeRequestsRequest)
 	if err := dec(in); err != nil {
@@ -4301,6 +4401,42 @@ func _NuzurProduct_ListDeployments_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NuzurProduct_ListDeploymentRevisions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDeploymentRevisionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).ListDeploymentRevisions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_ListDeploymentRevisions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).ListDeploymentRevisions(ctx, req.(*ListDeploymentRevisionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NuzurProduct_UpdateDeploymentRevisionStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDeploymentRevisionStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NuzurProductServer).UpdateDeploymentRevisionStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NuzurProduct_UpdateDeploymentRevisionStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NuzurProductServer).UpdateDeploymentRevisionStatus(ctx, req.(*UpdateDeploymentRevisionStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NuzurProduct_MarkDeploymentDestroyed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarkDeploymentDestroyedRequest)
 	if err := dec(in); err != nil {
@@ -4805,6 +4941,14 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _NuzurProduct_CheckExtensionExecutionLimit_Handler,
 		},
 		{
+			MethodName: "AcquireExecutionSlot",
+			Handler:    _NuzurProduct_AcquireExecutionSlot_Handler,
+		},
+		{
+			MethodName: "HeartbeatExecution",
+			Handler:    _NuzurProduct_HeartbeatExecution_Handler,
+		},
+		{
 			MethodName: "ListUserChangeRequests",
 			Handler:    _NuzurProduct_ListUserChangeRequests_Handler,
 		},
@@ -4991,6 +5135,14 @@ var NuzurProduct_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListDeployments",
 			Handler:    _NuzurProduct_ListDeployments_Handler,
+		},
+		{
+			MethodName: "ListDeploymentRevisions",
+			Handler:    _NuzurProduct_ListDeploymentRevisions_Handler,
+		},
+		{
+			MethodName: "UpdateDeploymentRevisionStatus",
+			Handler:    _NuzurProduct_UpdateDeploymentRevisionStatus_Handler,
 		},
 		{
 			MethodName: "MarkDeploymentDestroyed",

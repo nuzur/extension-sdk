@@ -47,6 +47,11 @@ type CreateExecutionRequest struct {
 	Extension            *nemgen.Extension
 }
 
+// CreateExecution creates the execution row in the QUEUED state. Admission into
+// the global generation queue (and promotion to INPROGRESS) is handled
+// separately via AcquireExecutionSlot, so the extension server does not begin
+// work until it is granted a slot. The former monthly Pro-execution limit has
+// been replaced by the queue.
 func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest) (*nemgen.ExtensionExecution, error) {
 	if req.ProjectUUID == uuid.Nil {
 		return nil, errors.New("project uuid is required")
@@ -56,32 +61,80 @@ func (c *Client) CreateExecution(ctx context.Context, req CreateExecutionRequest
 		return nil, errors.New("project version uuid is required")
 	}
 
-	// Check monthly execution limits for Pro extensions
-	extUUID := c.metadata.UUID
-	if req.Extension != nil && req.Extension.Uuid != "" {
-		extUUID = req.Extension.Uuid
-	}
-
-	limitRes, err := c.productClient.CheckExtensionExecutionLimit(ctx, &gen.CheckExtensionExecutionLimitRequest{
-		ProjectUuid:   req.ProjectUUID.String(),
-		ExtensionUuid: extUUID,
-	})
-	if err == nil && limitRes.IsLimited {
-		return nil, errors.New("monthly limit of 5 Pro extension executions reached. Please upgrade to Pro for unlimited executions.")
-	}
-
 	return c.productClient.CreateExtensionExecution(ctx, &gen.CreateExtensionExecutionRequest{
 		Execution: &nemgen.ExtensionExecution{
 			ExtensionUuid:        c.metadata.UUID,
 			ExtensionVersionUuid: c.metadata.VersionUUID,
-			Status:               nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_INPROGRESS,
-			StatusMsg:            "in_progress",
+			Status:               nemgen.ExtensionExecutionStatus_EXTENSION_EXECUTION_STATUS_QUEUED,
+			StatusMsg:            "queued",
 			ProjectUuid:          req.ProjectUUID.String(),
 			ProjectVersionUuid:   req.ProjectVersionUUID.String(),
 			ProjectExtensionUuid: req.ProjectExtensionUUID.String(),
 			Metadata:             req.Metadata,
+			// Seed the heartbeat at creation so the freshly-queued row is
+			// immediately "live" and not mistaken for abandoned before the first
+			// AcquireExecutionSlot poll refreshes it.
+			LastHeartbeatAt: timestamppb.Now(),
 		},
 	})
+}
+
+// SlotState mirrors the product admission-queue slot state.
+type SlotState int
+
+const (
+	SlotInvalid SlotState = iota
+	SlotAdmitted
+	SlotQueued
+)
+
+// AcquireSlotResponse is the outcome of an AcquireExecutionSlot call.
+type AcquireSlotResponse struct {
+	State                SlotState
+	Position             int64
+	EstimatedWaitSeconds int64
+}
+
+// AcquireExecutionSlot asks product whether this execution may start now. It is
+// safe to call repeatedly while waiting: each call refreshes the queue
+// heartbeat and re-evaluates admission. When State is SlotAdmitted the row has
+// been promoted to INPROGRESS and work may begin.
+func (c *Client) AcquireExecutionSlot(ctx context.Context, executionUUID uuid.UUID) (*AcquireSlotResponse, error) {
+	if executionUUID == uuid.Nil {
+		return nil, errors.New("execution uuid is required")
+	}
+	res, err := c.productClient.AcquireExecutionSlot(ctx, &gen.AcquireExecutionSlotRequest{
+		ExecutionUuid: executionUUID.String(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	var state SlotState
+	switch res.State {
+	case gen.ExecutionSlotState_EXECUTION_SLOT_STATE_ADMITTED:
+		state = SlotAdmitted
+	case gen.ExecutionSlotState_EXECUTION_SLOT_STATE_QUEUED:
+		state = SlotQueued
+	default:
+		state = SlotInvalid
+	}
+	return &AcquireSlotResponse{
+		State:                state,
+		Position:             res.Position,
+		EstimatedWaitSeconds: res.EstimatedWaitSeconds,
+	}, nil
+}
+
+// HeartbeatExecution refreshes the liveness timestamp of an in-progress
+// execution so the queue reaper does not reclaim its slot mid-run.
+func (c *Client) HeartbeatExecution(ctx context.Context, executionUUID uuid.UUID) error {
+	if executionUUID == uuid.Nil {
+		return errors.New("execution uuid is required")
+	}
+	_, err := c.productClient.HeartbeatExecution(ctx, &gen.HeartbeatExecutionRequest{
+		ExecutionUuid: executionUUID.String(),
+	})
+	return err
 }
 
 type CheckLimitRequest struct {
